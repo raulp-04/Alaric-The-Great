@@ -55,24 +55,11 @@ public class TileManager {
                 // TOP COMBINATION [7]
             tile[7] = new Tile();
             tile[7].image = img.getSubimage(33, 110, 16, 16);
-                // LEFT COMBINATION [8]
+                // STONE WALL
             tile[8] = new Tile();
-            tile[8].image = img.getSubimage(46, 97, 16, 16);
-                // RIGHT COMBINATION [9]
-            tile[9] = new Tile();
-            tile[9].image = img.getSubimage(18, 97, 16, 16);
-                // TOP-RIGHT COMBINATION [10]
-            tile[10] = new Tile();
-            tile[10].image = img.getSubimage(64, 130, 16, 16);
-            // TOP-LEFT COMBINATION [11]
-            tile[11] = new Tile();
-            tile[11].image = img.getSubimage(18, 97, 16, 16);
-            // BOTTOM-RIGHT COMBINATION [12]
-            tile[12] = new Tile();
-            tile[12].image = img.getSubimage(18, 97, 16, 16);
-            // BOTTOM-LEFT COMBINATION [13]
-            tile[13] = new Tile();
-            tile[13].image = img.getSubimage(18, 97, 16, 16);
+            tile[8].image = img.getSubimage(32, 208, 16, 16);
+            tile[8].collition = true;
+
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -97,6 +84,9 @@ public class TileManager {
                 if (col == gp.maxWorldCol) {
                     col = 0;
                     row++;
+                    if (row == 58) {
+                        int i = 0;
+                    }
                 }
             }
         }catch(Exception e) {

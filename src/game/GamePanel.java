@@ -1,6 +1,7 @@
 package game;
 
 import entity.Player;
+import object.SuperObject;
 import tile.TileManager;
 
 import javax.swing.*;
@@ -18,10 +19,13 @@ public class GamePanel extends JPanel implements Runnable {
     public final int screenHeight = maxScreenRow * tileSize; // 576
 
     // WORLD SETTINGS
-    public final int maxWorldCol = 50;
-    public final int maxWorldRow = 50;
-    public final int wolrdWidth = maxWorldCol * tileSize;
-    public final int wolrdHeight = maxWorldRow * tileSize;
+    public final int maxWorldCol = 64;
+    public final int maxWorldRow = 59;
+    public final int worldWidth = maxWorldCol * tileSize;
+    public final int worldHeight = maxWorldRow * tileSize;
+    public SuperObject[] obj = new SuperObject[10];
+    public AssetSetter aSetter = new AssetSetter(this);
+
 
     // FPS
     final double FPS = 60;
@@ -39,6 +43,11 @@ public class GamePanel extends JPanel implements Runnable {
         setDoubleBuffered(true);
         addKeyListener(keyHandler);
         setFocusable(true);
+    }
+
+    public void setUpGame() {
+        aSetter.setObject();
+
     }
 
     public void startGameThread() {
@@ -80,10 +89,26 @@ public class GamePanel extends JPanel implements Runnable {
         super.paintComponent(g);
 
         Graphics2D g2d = (Graphics2D) g;
-
+        // TILE
         tileManager.draw(g2d);
 
+        // OBJECT
+        for (SuperObject superObject : obj) {
+            if (superObject != null) {
+                superObject.draw(g2d, this);
+            }
+        }
+
+        // PLAYER
         player.draw(g2d);
+
+        // BAR FOR INFORMATION
+        g2d.setColor(Color.BLACK);
+        g2d.fillRect(0, 0, screenWidth, 80);
+        g2d.setColor(Color.WHITE);
+        g2d.setFont(new Font(Font.DIALOG, Font.ITALIC, 60));
+        g2d.drawString("<LIFE>", screenWidth - 200, 60);
+        g2d.drawString("SCORE 0", 0, 60);
 
         g2d.dispose();
     }

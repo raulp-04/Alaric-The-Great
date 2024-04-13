@@ -13,6 +13,8 @@ public class Player extends Entity {
     KeyHandler keyHandler;
     public final int screenX;
     public final int screenY;
+    int hasGem = 0;
+
     public Player(GamePanel gp, KeyHandler keyH) {
 
         this.gp = gp;
@@ -22,13 +24,15 @@ public class Player extends Entity {
         screenY = gp.screenHeight / 2 - (gp.tileSize);
 
         solidArea = new Rectangle(40, 55, 16, 16);
+        solidAreaDefaultX = solidArea.x;
+        solidAreaDefaultY = solidArea.y;
 
         setDefaultValues();
         getPlayerImage();
     }
     public void setDefaultValues() {
-        worldX = gp.tileSize * 23;
-        worldY = gp.tileSize * 23;
+        worldX = gp.tileSize * 30;
+        worldY = gp.tileSize * 30;
         speed = 4;
         direction = "right";
     }
@@ -90,7 +94,10 @@ public class Player extends Entity {
             }
 
             collisionOn = false;
-            gp.cChecker.collisionCheck(this);
+            gp.cChecker.collisionCheckTile(this);
+
+            int objIndex = gp.cChecker.collitionCheckObject(this, true);
+            pickUpObj(objIndex);
 
             // CHECK COLLISION, FALSE MEANS MOVING
             if (collisionOn == false) {
@@ -108,6 +115,19 @@ public class Player extends Entity {
                     spriteNumber = 0;
                 } else {spriteNumber++;}
                 spriteCounter = 0;
+            }
+        }
+    }
+
+    public void pickUpObj(int index) {
+        if (index != 999) {
+            String name = gp.obj[index].name;
+            switch (name) {
+                case "Gem":
+                    hasGem += 100;
+                    gp.obj[index] = null;
+                    System.out.println("Picked up Gem\nSCORE: " + hasGem);
+                    break;
             }
         }
     }
