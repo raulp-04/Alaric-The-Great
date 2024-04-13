@@ -29,12 +29,13 @@ public class GamePanel extends JPanel implements Runnable {
     TileManager tileManager = new TileManager(this);
     KeyHandler keyHandler = new KeyHandler();
     Thread gameThread;
+    public CollisionChecker cChecker = new CollisionChecker(this);
     public Player player = new Player(this, keyHandler);
 
 
     public GamePanel() {
         setPreferredSize(new Dimension(screenWidth, screenHeight));
-        setBackground(Color.WHITE);
+        setBackground(Color.BLACK);
         setDoubleBuffered(true);
         addKeyListener(keyHandler);
         setFocusable(true);

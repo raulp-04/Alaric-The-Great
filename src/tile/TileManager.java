@@ -9,12 +9,12 @@ import java.io.*;
 
 public class TileManager {
     GamePanel gp;
-    Tile[] tile;
-    int[][] mapTileNum;
+    public Tile[] tile;
+    public int[][] mapTileNum;
 
     public TileManager(GamePanel gp) {
         this.gp = gp;
-        tile = new Tile[10];
+        tile = new Tile[100];
         mapTileNum = new int[gp.maxWorldCol][gp.maxWorldRow];
 
         getTileImage();
@@ -27,30 +27,52 @@ public class TileManager {
 
             BufferedImage img = ImageIO.read(getClass().getClassLoader().getResourceAsStream("tiles/tile-sheet.png"));
 
-            tile[0] = new Tile(); // GRASS
+            tile[0] = new Tile(); // GRASS [0]
             tile[0].image = img.getSubimage(32, 94, 16, 16);
 
-            tile[1] = new Tile(); // STONE
+            tile[1] = new Tile(); // STONE [1]
             tile[1].image = img.getSubimage(32, 142, 16, 16);
 
-            tile[2] = new Tile(); // DIRT
-            tile[2].image = img.getSubimage(80, 94, 16, 16);
+            tile[2] = new Tile(); // DIRT [2]
+            tile[2].image = img.getSubimage(86, 144, 16, 16);
 
-            // CHANGE
-            tile[3] = new Tile();
-            tile[3].image = img.getSubimage(80, 94, 16, 16);
+            tile[3] = new Tile(); // TREE [3]
+            tile[3].image = img.getSubimage(112, 176, 32, 32);
+            tile[3].collition = true;
 
-            tile[4] = new Tile();
-            tile[4].image = img.getSubimage(80, 94, 16, 16);
+            tile[4] = new Tile(); // MUSHROOM RED [4]
+            tile[4].image = img.getSubimage(144, 208, 32, 32);
+            tile[4].collition = true;
 
-            tile[5] = new Tile();
-            tile[5].image = img.getSubimage(80, 94, 16, 16);
+            tile[5] = new Tile(); // MUSHROOM BROWN [5]
+            tile[5].image = img.getSubimage(112, 208, 32, 32);
+            tile[5].collition = true;
 
+            // GRASS AND DIRT
+                // BOTTOM COMBINATION [6]
             tile[6] = new Tile();
-            tile[6].image = img.getSubimage(80, 94, 16, 16);
-
+            tile[6].image = img.getSubimage(33, 82, 16, 16);
+                // TOP COMBINATION [7]
             tile[7] = new Tile();
-            tile[7].image = img.getSubimage(80, 94, 16, 16);
+            tile[7].image = img.getSubimage(33, 110, 16, 16);
+                // LEFT COMBINATION [8]
+            tile[8] = new Tile();
+            tile[8].image = img.getSubimage(46, 97, 16, 16);
+                // RIGHT COMBINATION [9]
+            tile[9] = new Tile();
+            tile[9].image = img.getSubimage(18, 97, 16, 16);
+                // TOP-RIGHT COMBINATION [10]
+            tile[10] = new Tile();
+            tile[10].image = img.getSubimage(64, 130, 16, 16);
+            // TOP-LEFT COMBINATION [11]
+            tile[11] = new Tile();
+            tile[11].image = img.getSubimage(18, 97, 16, 16);
+            // BOTTOM-RIGHT COMBINATION [12]
+            tile[12] = new Tile();
+            tile[12].image = img.getSubimage(18, 97, 16, 16);
+            // BOTTOM-LEFT COMBINATION [13]
+            tile[13] = new Tile();
+            tile[13].image = img.getSubimage(18, 97, 16, 16);
         } catch (IOException e) {
             e.printStackTrace();
         }

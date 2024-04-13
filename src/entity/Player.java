@@ -11,8 +11,6 @@ import java.io.IOException;
 public class Player extends Entity {
     GamePanel gp;
     KeyHandler keyHandler;
-    String direction;
-
     public final int screenX;
     public final int screenY;
     public Player(GamePanel gp, KeyHandler keyH) {
@@ -22,6 +20,8 @@ public class Player extends Entity {
 
         screenX = gp.screenWidth / 2 - (gp.tileSize);
         screenY = gp.screenHeight / 2 - (gp.tileSize);
+
+        solidArea = new Rectangle(40, 55, 16, 16);
 
         setDefaultValues();
         getPlayerImage();
@@ -81,16 +81,25 @@ public class Player extends Entity {
         if (keyHandler.upPressed || keyHandler.leftPressed || keyHandler.rightPressed || keyHandler.downPressed) {
             if (keyHandler.upPressed) {
                 direction = "up";
-                worldY -= speed;
             } else if (keyHandler.downPressed) {
                 direction = "down";
-                worldY += speed;
             } else if (keyHandler.leftPressed) {
                 direction = "left";
-                worldX -= speed;
-            } else {
+            } else if (keyHandler.rightPressed) {
                 direction = "right";
-                worldX += speed;
+            }
+
+            collisionOn = false;
+            gp.cChecker.collisionCheck(this);
+
+            // CHECK COLLISION, FALSE MEANS MOVING
+            if (collisionOn == false) {
+                switch (direction) {
+                    case "up": worldY -= speed; break;
+                    case "down": worldY += speed;break;
+                    case "left": worldX -= speed; break;
+                    case "right":  worldX += speed; break;
+                }
             }
 
             spriteCounter++;
@@ -120,7 +129,6 @@ public class Player extends Entity {
                 images = walkRight[spriteNumber];
                 break;
         }
-        images = Scalr.resize(images, 100, 100); // RESIZE SPRITE
-        g2d.drawImage(images, screenX, screenY, null);
+        g2d.drawImage(images, screenX, screenY, 96, 96, null);
     }
 }
