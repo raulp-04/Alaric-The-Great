@@ -2,6 +2,8 @@ package game;
 
 import object.OBJ_Chest;
 import object.OBJ_Gems;
+import object.OBJ_Key;
+import object.OBJ_Sword;
 import tile.Tile;
 
 import java.awt.*;
@@ -15,11 +17,11 @@ public class AssetSetter {
     }
     public void setObject() {
 
-        gp.obj[0] = new OBJ_Gems();
+        gp.obj[0] = new OBJ_Sword();
         gp.obj[0].worldX = 16 * gp.tileSize;
         gp.obj[0].worldY = 15 * gp.tileSize;
 
-        gp.obj[1] = new OBJ_Gems();
+        gp.obj[1] = new OBJ_Key();
         gp.obj[1].worldX = 44 * gp.tileSize;
         gp.obj[1].worldY = 15 * gp.tileSize;
 

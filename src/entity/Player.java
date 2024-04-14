@@ -2,11 +2,13 @@ package entity;
 
 import game.GamePanel;
 import game.KeyHandler;
+import object.OBJ_Gems;
 
 import javax.imageio.ImageIO;
 import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
+import java.util.Random;
 
 public class Player extends Entity {
     GamePanel gp;
@@ -14,6 +16,13 @@ public class Player extends Entity {
     public final int screenX;
     public final int screenY;
     int hasGem = 0;
+    boolean hasSword = false;
+    int hasKey = 0;
+    BufferedImage[] walkUpS;
+    BufferedImage[] walkDownS;
+    BufferedImage[] walkLeftS;
+    BufferedImage[] walkRightS;
+
 
     public Player(GamePanel gp, KeyHandler keyH) {
 
@@ -38,8 +47,10 @@ public class Player extends Entity {
     }
 
     public void getPlayerImage() {
+
         try {
             BufferedImage img = ImageIO.read(getClass().getClassLoader().getResourceAsStream("player/knight.png"));
+            // WITHOUT SWORD
             walkRight = cutImage(img, 0, 160, new int[]{32, 32, 32, 32, 32, 32, 32, 32}, new int[]{32, 32, 32, 32, 32, 32, 32, 32});
             walkUp = cutImage(img, 0, 192, new int[]{32, 32, 32, 32, 32, 32, 32, 32}, new int[]{32, 32, 32, 32, 32, 32, 32, 32});
             walkDown = cutImage(img, 0, 224, new int[]{32, 32, 32, 32, 32, 32, 32, 32}, new int[]{32, 32, 32, 32, 32, 32, 32, 32});
@@ -47,6 +58,13 @@ public class Player extends Entity {
             for (int i = 0; i < walkRight.length; i++) {
                 walkLeft[i] = mirrorImage(walkRight[i]);
             }
+
+            // WITH SWORD
+            walkUpS = cutImage(img, 0, 64, new int[]{32, 32, 32, 32, 32, 32, 32, 32}, new int[]{32, 32, 32, 32, 32, 32, 32, 32});
+            walkDownS = cutImage(img, 0, 128, new int[]{32, 32, 32, 32, 32, 32, 32, 32}, new int[]{32, 32, 32, 32, 32, 32, 32, 32});
+            walkLeftS = cutImage(img, 0, 96, new int[]{32, 32, 32, 32, 32, 32, 32, 32}, new int[]{32, 32, 32, 32, 32, 32, 32, 32});
+            walkRightS = cutImage(img, 0, 32, new int[]{32, 32, 32, 32, 32, 32, 32, 32}, new int[]{32, 32, 32, 32, 32, 32, 32, 32});
+
         }catch (IOException e) {
             e.printStackTrace();
         }
@@ -100,7 +118,7 @@ public class Player extends Entity {
             pickUpObj(objIndex);
 
             // CHECK COLLISION, FALSE MEANS MOVING
-            if (collisionOn == false) {
+            if (!collisionOn) {
                 switch (direction) {
                     case "up": worldY -= speed; break;
                     case "down": worldY += speed;break;
@@ -126,7 +144,32 @@ public class Player extends Entity {
                 case "Gem":
                     hasGem += 100;
                     gp.obj[index] = null;
-                    System.out.println("Picked up Gem\nSCORE: " + hasGem);
+                    System.out.println("\nPICKED UP A GEM\nSCORE " + hasGem);
+                    gp.playSE(2);
+                    break;
+                case "Sword":
+                    hasSword = true;
+                    gp.obj[index] = null;
+                    System.out.println("\nPICKED UP SWORD AND SHIELD");
+                    gp.playSE(2);
+                    break;
+                case "Key":
+                    hasKey += 1;
+                    gp.obj[index] = null;
+                    System.out.println("\nPICKED UP A KEY\nNUMBER OF KEYS "+hasKey);
+                    gp.playSE(2);
+                    break;
+                case "Chest":
+                    if(hasKey>0) {
+                        hasKey--;
+                        System.out.println("\nUSED A KEY\nNUMBER OF KEYS "+hasKey);
+                        gp.obj[index] = null;
+                        Random rand = new Random();
+                        int gemNum = rand.nextInt(1000)+100;
+                        hasGem += gemNum;
+                        System.out.println("CHEST HAD "+ gemNum + " GEMS\nSCORE "+hasGem);
+                        gp.playSE(1);
+                    }
                     break;
             }
         }
@@ -137,16 +180,16 @@ public class Player extends Entity {
 
         switch (direction) {
             case "up":
-                images = walkUp[spriteNumber];
+                images = (!hasSword)? walkUp[spriteNumber] : walkUpS[spriteNumber];
                 break;
             case "down":
-                images = walkDown[spriteNumber];
+                images = (!hasSword)? walkDown[spriteNumber] : walkDownS[spriteNumber];
                 break;
             case "left":
-                images = walkLeft[spriteNumber];
+                images = (!hasSword)? walkLeft[spriteNumber] : walkLeftS[spriteNumber];
                 break;
             case "right":
-                images = walkRight[spriteNumber];
+                images = (!hasSword)? walkRight[spriteNumber] : walkRightS[spriteNumber];
                 break;
         }
         g2d.drawImage(images, screenX, screenY, 96, 96, null);
