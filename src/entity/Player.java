@@ -2,16 +2,16 @@ package entity;
 
 import game.GamePanel;
 import game.KeyHandler;
-import object.OBJ_Gems;
 
 import javax.imageio.ImageIO;
 import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
+import java.util.Objects;
 import java.util.Random;
 
 public class Player extends Entity {
-    GamePanel gp;
+
     KeyHandler keyHandler;
     public final int screenX;
     public final int screenY;
@@ -26,7 +26,8 @@ public class Player extends Entity {
 
     public Player(GamePanel gp, KeyHandler keyH) {
 
-        this.gp = gp;
+        super(gp);
+
         this.keyHandler = keyH;
 
         screenX = gp.screenWidth / 2 - (gp.tileSize);
@@ -49,7 +50,7 @@ public class Player extends Entity {
     public void getPlayerImage() {
 
         try {
-            BufferedImage img = ImageIO.read(getClass().getClassLoader().getResourceAsStream("player/knight.png"));
+            BufferedImage img = ImageIO.read(Objects.requireNonNull(getClass().getClassLoader().getResourceAsStream("player/knight.png")));
             // WITHOUT SWORD
             walkRight = cutImage(img, 0, 160, new int[]{32, 32, 32, 32, 32, 32, 32, 32}, new int[]{32, 32, 32, 32, 32, 32, 32, 32});
             walkUp = cutImage(img, 0, 192, new int[]{32, 32, 32, 32, 32, 32, 32, 32}, new int[]{32, 32, 32, 32, 32, 32, 32, 32});
@@ -70,35 +71,6 @@ public class Player extends Entity {
         }
     }
 
-    public BufferedImage[] cutImage(BufferedImage img, int x, int y, int []width, int []height) {
-        BufferedImage[] images = new BufferedImage[width.length];
-        for (int i = 0; i < width.length; i++) {
-            images[i] = img.getSubimage(x, y, width[i], height[i]);
-            x += width[i];
-        }
-        return images;
-    }
-
-    public BufferedImage mirrorImage(BufferedImage img) {
-        // Get source image dimension
-        int width = img.getWidth();
-        int height = img.getHeight();
-
-        // BufferedImage for mirror image
-        BufferedImage mImg = new BufferedImage(
-                width, height, BufferedImage.TYPE_INT_ARGB);
-
-        // Create mirror image pixel by pixel
-        for (int y = 0; y < height; y++) {
-            for (int lx = 0, rx = width - 1; lx < width; lx++, rx--) {
-                int p = img.getRGB(lx, y);
-                mImg.setRGB(rx, y, p);
-            }
-        }
-
-        return mImg;
-    }
-
     public void update() {
         if (keyHandler.upPressed || keyHandler.leftPressed || keyHandler.rightPressed || keyHandler.downPressed) {
             if (keyHandler.upPressed) {
@@ -111,11 +83,17 @@ public class Player extends Entity {
                 direction = "right";
             }
 
+            // TILE COLL
             collisionOn = false;
             gp.cChecker.collisionCheckTile(this);
 
-            int objIndex = gp.cChecker.collitionCheckObject(this, true);
+            // OBJ COLL
+            int objIndex = gp.cChecker.collisionCheckObject(this, true);
             pickUpObj(objIndex);
+
+            // NPC COLL
+            int npcIndex = gp.cChecker.collisionCheckEntity(this, gp.npc);
+            interactNPC(npcIndex);
 
             // CHECK COLLISION, FALSE MEANS MOVING
             if (!collisionOn) {
@@ -134,6 +112,17 @@ public class Player extends Entity {
                 } else {spriteNumber++;}
                 spriteCounter = 0;
             }
+        }
+    }
+
+    public void interactNPC(int index) {
+
+        if (index != 999) {
+            if (gp.keyHandler.enterPressed) {
+                gp.gameState = gp.DIALOG_STATE;
+                gp.npc[index].speak();
+            } else gp.ui.showMessage("PRESS ENTER TO SPEAK");
+            gp.keyHandler.enterPressed = false;
         }
     }
 
@@ -165,7 +154,7 @@ public class Player extends Entity {
                         gp.ui.showMessage("USED A KEY");
                         gp.obj[index] = null;
                         Random rand = new Random();
-                        int gemNum = rand.nextInt(900)+100;
+                        int gemNum = rand.nextInt(900)+101;
                         hasGem += gemNum;
                         gp.ui.showMessage("CHEST HAD "+ gemNum + " GEMS");
                         gp.playSE(1);
@@ -175,6 +164,7 @@ public class Player extends Entity {
         }
     }
 
+    @Override
     public void draw(Graphics2D g2d) {
         BufferedImage images = null;
 

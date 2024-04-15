@@ -1,5 +1,6 @@
 package game;
 
+import entity.Entity;
 import entity.Player;
 import object.SuperObject;
 import tile.TileManager;
@@ -27,7 +28,7 @@ public class GamePanel extends JPanel implements Runnable {
 
     // SYSTEM
     TileManager tileManager = new TileManager(this);
-    KeyHandler keyHandler = new KeyHandler();
+    public KeyHandler keyHandler = new KeyHandler(this);
     Thread gameThread;
     public CollisionChecker cChecker = new CollisionChecker(this);
     public Sound music = new Sound();
@@ -38,6 +39,14 @@ public class GamePanel extends JPanel implements Runnable {
     // ENTITY AND OBJECT
     public Player player = new Player(this, keyHandler);
     public SuperObject[] obj = new SuperObject[10];
+    public Entity[] npc = new Entity[10];
+
+    // GAME STATE
+    public final int PLAY_STATE = 1;
+    public final int PAUSE_STATE = 2;
+    public final int DIALOG_STATE = 3;
+    public int gameState = PLAY_STATE;
+
 
 
     public GamePanel() {
@@ -50,6 +59,7 @@ public class GamePanel extends JPanel implements Runnable {
 
     public void setUpGame() {
         aSetter.setObject();
+        aSetter.setNPC();
         playMusic(0);
     }
 
@@ -85,13 +95,33 @@ public class GamePanel extends JPanel implements Runnable {
     }
 
     public void update() {
-       player.update();
+
+        if (gameState == PLAY_STATE) {
+           // PLAYER
+           player.update();
+
+           // NPC
+            for (Entity entity : npc) {
+                if (entity != null) {
+                    entity.update();
+                }
+            }
+       }
+       if (gameState == PAUSE_STATE) {
+           // TODO LATER
+       }
     }
 
     public void paintComponent(Graphics g) {
         super.paintComponent(g);
 
         Graphics2D g2d = (Graphics2D) g;
+
+        // DEGUB
+        long drawTime = System.nanoTime();
+        if (keyHandler.drawTime) {drawTime = System.nanoTime();}
+
+
         // TILE
         tileManager.draw(g2d);
 
@@ -102,19 +132,33 @@ public class GamePanel extends JPanel implements Runnable {
             }
         }
 
+        // NPC
+        for (Entity entity : npc) {
+            if (entity != null) {
+                entity.draw(g2d);
+            }
+        }
+
         // PLAYER
         player.draw(g2d);
 
         // BAR FOR INFORMATION
         g2d.setColor(Color.BLACK);
-        g2d.fillRect(10, 10, screenWidth-20, 80);
+        g2d.fillRoundRect(10, 10, screenWidth-20, 80, 10, 10);
         g2d.setColor(Color.WHITE);
-        g2d.fillRect(10, 10, screenWidth-20, 5);
-        g2d.fillRect(10, 85, screenWidth-20, 5);
-        g2d.fillRect(10, 10, 5, 80);
-        g2d.fillRect(screenWidth-15, 10, 5, 80);
+        g2d.setStroke(new BasicStroke(5));
+        g2d.drawRoundRect(10, 10, screenWidth-20, 80, 10, 10);
 
         ui.draw(g2d);
+
+        if (keyHandler.drawTime) {
+            long drawTime2 = System.nanoTime();
+            long passedTime = drawTime2 - drawTime;
+            g2d.setColor(Color.WHITE);
+            g2d.setFont(new Font("Arial", Font.BOLD, 30));
+            g2d.drawString("Draw Time " + passedTime, screenWidth-283, screenHeight-10);
+            System.out.println("Draw Time " + passedTime);
+        }
 
         g2d.dispose();
     }
