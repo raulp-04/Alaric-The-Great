@@ -22,6 +22,7 @@ public class Entity {
     public int actionLockCounter;
     public String[] dialog = new String[20];
     public int dialogIndex = 0;
+    public boolean attacking = false;
 
     public boolean collisionOn = false;
 

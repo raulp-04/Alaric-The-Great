@@ -22,6 +22,11 @@ public class Player extends Entity {
     BufferedImage[] walkDownS;
     BufferedImage[] walkLeftS;
     BufferedImage[] walkRightS;
+    BufferedImage[] attackUp;
+    BufferedImage[] attackDown;
+    BufferedImage[] attackLeft;
+    BufferedImage[] attackRight;
+    int spriteNumAt = 0;
 
 
     public Player(GamePanel gp, KeyHandler keyH) {
@@ -39,6 +44,7 @@ public class Player extends Entity {
 
         setDefaultValues();
         getPlayerImage();
+        getPlayerAttack();
     }
     public void setDefaultValues() {
         worldX = gp.tileSize * 30;
@@ -71,8 +77,25 @@ public class Player extends Entity {
         }
     }
 
+    public void getPlayerAttack() {
+        //17
+        try {
+            BufferedImage img = ImageIO.read(Objects.requireNonNull(getClass().getClassLoader().getResourceAsStream("player/knight.png")));
+
+            attackUp = cutImage(img, 0, 17*32, new int[]{32, 32, 32, 32, 32, 32}, new int[]{32, 32, 32, 32, 32, 32});
+            attackDown = cutImage(img, 0, 19*32, new int[]{32, 32, 32, 32, 32, 32}, new int[]{32, 32, 32, 32, 32, 32});
+            attackLeft = cutImage(img, 0, 18*32, new int[]{32, 32, 32, 32, 32, 32}, new int[]{32, 32, 32, 32, 32, 32});
+            attackRight = cutImage(img, 0, 16*32, new int[]{32, 32, 32, 32, 32, 32}, new int[]{32, 32, 32, 32, 32, 32});
+
+        }catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
     public void update() {
-        if (keyHandler.upPressed || keyHandler.leftPressed || keyHandler.rightPressed || keyHandler.downPressed) {
+        if (attacking && hasSword) {
+            attacking();
+        } else if (keyHandler.upPressed || keyHandler.leftPressed || keyHandler.rightPressed || keyHandler.downPressed || keyHandler.enterPressed) {
             if (keyHandler.upPressed) {
                 direction = "up";
             } else if (keyHandler.downPressed) {
@@ -96,33 +119,63 @@ public class Player extends Entity {
             interactNPC(npcIndex);
 
             // CHECK COLLISION, FALSE MEANS MOVING
-            if (!collisionOn) {
+            if (!collisionOn && !keyHandler.enterPressed) {
                 switch (direction) {
                     case "up": worldY -= speed; break;
-                    case "down": worldY += speed;break;
+                    case "down": worldY += speed; break;
                     case "left": worldX -= speed; break;
                     case "right":  worldX += speed; break;
                 }
             }
+            gp.keyHandler.enterPressed = false;
 
             spriteCounter++;
             if (spriteCounter > 4) {
                 if (spriteNumber == 7) {
                     spriteNumber = 0;
-                } else {spriteNumber++;}
+                } else {
+                    spriteNumber++;
+                }
                 spriteCounter = 0;
             }
+
+        }
+    }
+
+    public void attacking() {
+
+        spriteCounter++;
+        if(spriteCounter <= 5) {
+            spriteNumAt = 0;
+        }
+        if(spriteCounter > 5 && spriteCounter <= 10) {
+            spriteNumAt = 1;
+        }
+        if(spriteCounter > 10 && spriteCounter <= 15) {
+            spriteNumAt = 2;
+        }
+        if(spriteCounter > 15 && spriteCounter <= 20) {
+            spriteNumAt = 3;
+            if (spriteCounter == 16) gp.playSE(3);
+        }
+        if(spriteCounter > 20 && spriteCounter <= 25){
+            spriteNumAt = 4;
+        }
+        if (spriteCounter > 25) {
+            spriteNumAt = 0;
+            spriteCounter = 0;
+            attacking = false;
         }
     }
 
     public void interactNPC(int index) {
-
         if (index != 999) {
             if (gp.keyHandler.enterPressed) {
                 gp.gameState = gp.DIALOG_STATE;
                 gp.npc[index].speak();
-            } else gp.ui.showMessage("PRESS ENTER TO SPEAK");
-            gp.keyHandler.enterPressed = false;
+            } else gp.ui.showMessage("PRESS ENTER TO INTERACT");
+        } else if (gp.keyHandler.enterPressed && hasSword) {
+            attacking = true;
         }
     }
 
@@ -170,16 +223,46 @@ public class Player extends Entity {
 
         switch (direction) {
             case "up":
-                images = (!hasSword)? walkUp[spriteNumber] : walkUpS[spriteNumber];
+                if (!attacking) {
+                    images = (!hasSword) ? walkUp[spriteNumber] : walkUpS[spriteNumber];
+                } else if (hasSword) {
+                    images = attackUp[spriteNumAt];
+                }
+                if (attacking && !hasSword) {
+                    images = walkUp[spriteNumber];
+                }
                 break;
             case "down":
-                images = (!hasSword)? walkDown[spriteNumber] : walkDownS[spriteNumber];
+                if (!attacking) {
+                    images = (!hasSword) ? walkDown[spriteNumber] : walkDownS[spriteNumber];
+                } else if (hasSword) {
+                    images = attackDown[spriteNumAt];
+                }
+                if (attacking && !hasSword) {
+                    images = walkDown[spriteNumber];
+                }
                 break;
             case "left":
-                images = (!hasSword)? walkLeft[spriteNumber] : walkLeftS[spriteNumber];
+                if (!attacking) {
+                    images = (!hasSword) ? walkLeft[spriteNumber] : walkLeftS[spriteNumber];
+                } else if (hasSword) {
+                    images = attackLeft[spriteNumAt];
+
+                }
+                if (attacking && !hasSword) {
+                    images = walkLeft[spriteNumber];
+                }
                 break;
             case "right":
-                images = (!hasSword)? walkRight[spriteNumber] : walkRightS[spriteNumber];
+                if (!attacking) {
+                    images = (!hasSword) ? walkRight[spriteNumber] : walkRightS[spriteNumber];
+                } else if (hasSword) {
+                    images = attackRight[spriteNumAt];
+
+                }
+                if (attacking && !hasSword) {
+                    images = walkRight[spriteNumber];
+                }
                 break;
         }
         g2d.drawImage(images, screenX, screenY, 96, 96, null);

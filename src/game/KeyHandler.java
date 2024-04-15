@@ -21,6 +21,7 @@ public class KeyHandler implements KeyListener {
         int code = e.getKeyCode();
         // PLAY STATE
         if (gp.gameState == gp.PLAY_STATE) {
+
             if (code == KeyEvent.VK_W) {
                 upPressed = true;
             }
@@ -36,12 +37,13 @@ public class KeyHandler implements KeyListener {
             if (code == KeyEvent.VK_T) {
                 drawTime = !drawTime;
             }
-            if (code == KeyEvent.VK_ESCAPE) {
-                gp.gameState = gp.PAUSE_STATE;
-            }
             if (code == KeyEvent.VK_ENTER) {
                 enterPressed = true;
             }
+            if (code == KeyEvent.VK_ESCAPE) {
+                gp.gameState = gp.PAUSE_STATE;
+            }
+
         }
         // PAUSE STATE
         else if (gp.gameState == gp.PAUSE_STATE) {
@@ -62,6 +64,7 @@ public class KeyHandler implements KeyListener {
     public void keyReleased(KeyEvent e) {
 
         int code = e.getKeyCode();
+
         // PLAY STATE
         if (code == KeyEvent.VK_W) {
             upPressed = false;
