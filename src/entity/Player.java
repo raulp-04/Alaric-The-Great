@@ -15,9 +15,9 @@ public class Player extends Entity {
     KeyHandler keyHandler;
     public final int screenX;
     public final int screenY;
-    int hasGem = 0;
+    public int hasGem = 0;
     boolean hasSword = false;
-    int hasKey = 0;
+    public int hasKey = 0;
     BufferedImage[] walkUpS;
     BufferedImage[] walkDownS;
     BufferedImage[] walkLeftS;
@@ -144,32 +144,32 @@ public class Player extends Entity {
                 case "Gem":
                     hasGem += 100;
                     gp.obj[index] = null;
-                    System.out.println("\nPICKED UP A GEM\nSCORE " + hasGem);
+                    gp.ui.showMessage("PICKED UP GEM");
                     gp.playSE(2);
                     break;
                 case "Sword":
                     hasSword = true;
                     gp.obj[index] = null;
-                    System.out.println("\nPICKED UP SWORD AND SHIELD");
+                    gp.ui.showMessage("PICKED UP SWORD AND SHIELD");
                     gp.playSE(2);
                     break;
                 case "Key":
                     hasKey += 1;
                     gp.obj[index] = null;
-                    System.out.println("\nPICKED UP A KEY\nNUMBER OF KEYS "+hasKey);
+                    gp.ui.showMessage("PICKED UP A KEY");
                     gp.playSE(2);
                     break;
                 case "Chest":
                     if(hasKey>0) {
                         hasKey--;
-                        System.out.println("\nUSED A KEY\nNUMBER OF KEYS "+hasKey);
+                        gp.ui.showMessage("USED A KEY");
                         gp.obj[index] = null;
                         Random rand = new Random();
-                        int gemNum = rand.nextInt(1000)+100;
+                        int gemNum = rand.nextInt(900)+100;
                         hasGem += gemNum;
-                        System.out.println("CHEST HAD "+ gemNum + " GEMS\nSCORE "+hasGem);
+                        gp.ui.showMessage("CHEST HAD "+ gemNum + " GEMS");
                         gp.playSE(1);
-                    }
+                    } else gp.ui.showMessage("YOU NEED A KEY TO OPEN");
                     break;
             }
         }

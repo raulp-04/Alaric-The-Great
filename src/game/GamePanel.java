@@ -32,6 +32,7 @@ public class GamePanel extends JPanel implements Runnable {
     public CollisionChecker cChecker = new CollisionChecker(this);
     public Sound music = new Sound();
     public Sound soundEffect = new Sound();
+    public UI ui = new UI(this);
     public AssetSetter aSetter = new AssetSetter(this);
 
     // ENTITY AND OBJECT
@@ -106,11 +107,14 @@ public class GamePanel extends JPanel implements Runnable {
 
         // BAR FOR INFORMATION
         g2d.setColor(Color.BLACK);
-        g2d.fillRect(0, 0, screenWidth, 80);
+        g2d.fillRect(10, 10, screenWidth-20, 80);
         g2d.setColor(Color.WHITE);
-        g2d.setFont(new Font(Font.DIALOG, Font.ITALIC, 60));
-        g2d.drawString("<LIFE>", screenWidth - 200, 60);
-        g2d.drawString("SCORE 0", 0, 60);
+        g2d.fillRect(10, 10, screenWidth-20, 5);
+        g2d.fillRect(10, 85, screenWidth-20, 5);
+        g2d.fillRect(10, 10, 5, 80);
+        g2d.fillRect(screenWidth-15, 10, 5, 80);
+
+        ui.draw(g2d);
 
         g2d.dispose();
     }
