@@ -62,7 +62,7 @@ public class CollisionChecker {
 
     public int collisionCheckObject(Entity entity, boolean player) {
 
-        int index = 999;
+        int index = gp.NO_COLLISION;
 
         for(int i = 0; i < gp.obj.length; i++) {
             if (gp.obj[i] != null) {
@@ -133,7 +133,7 @@ public class CollisionChecker {
     // NPC
     public int collisionCheckEntity(Entity entity, Entity[] target ) {
 
-        int index = 999;
+        int index = gp.NO_COLLISION;
 
         for(int i = 0; i < target.length; i++) {
             if (target[i] != null) {

@@ -169,7 +169,7 @@ public class Player extends Entity {
     }
 
     public void interactNPC(int index) {
-        if (index != 999) {
+        if (index != gp.NO_COLLISION) {
             if (gp.keyHandler.enterPressed) {
                 gp.gameState = gp.DIALOG_STATE;
                 gp.npc[index].speak();
@@ -180,7 +180,7 @@ public class Player extends Entity {
     }
 
     public void pickUpObj(int index) {
-        if (index != 999) {
+        if (index != gp.NO_COLLISION) {
             String name = gp.obj[index].name;
             switch (name) {
                 case "Gem":

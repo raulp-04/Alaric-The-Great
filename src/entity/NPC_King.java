@@ -88,7 +88,7 @@ public class NPC_King extends Entity{
             }
         }
         spriteCounter++;
-        if (spriteCounter > 6) {
+        if (spriteCounter > 16) {
             if (spriteNumber == 2) {
                 spriteNumber = 0;
             } else {spriteNumber++;}

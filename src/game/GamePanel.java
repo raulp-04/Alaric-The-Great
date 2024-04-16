@@ -18,6 +18,8 @@ public class GamePanel extends JPanel implements Runnable {
     public final int maxScreenRow = 12;
     public final int screenWidth = maxScreenCol * tileSize; // 768
     public final int screenHeight = maxScreenRow * tileSize; // 576
+    public final int NO_COLLISION = -1;
+
 
     // WORLD SETTINGS
     public final int maxWorldCol = 64;
@@ -42,10 +44,13 @@ public class GamePanel extends JPanel implements Runnable {
     public Entity[] npc = new Entity[10];
 
     // GAME STATE
+    public final int MENU_STATE = 0;
     public final int PLAY_STATE = 1;
     public final int PAUSE_STATE = 2;
     public final int DIALOG_STATE = 3;
-    public int gameState = PLAY_STATE;
+    public final int CONTROL_STATE = 4;
+
+    public int gameState = MENU_STATE;
 
 
 
@@ -58,9 +63,9 @@ public class GamePanel extends JPanel implements Runnable {
     }
 
     public void setUpGame() {
+
         aSetter.setObject();
         aSetter.setNPC();
-        playMusic(0);
     }
 
     public void startGameThread() {
@@ -90,6 +95,7 @@ public class GamePanel extends JPanel implements Runnable {
                 repaint();
                 delta--;
                 drawCount++;
+
             }
         }
     }
@@ -113,53 +119,62 @@ public class GamePanel extends JPanel implements Runnable {
     }
 
     public void paintComponent(Graphics g) {
+
         super.paintComponent(g);
-
         Graphics2D g2d = (Graphics2D) g;
-
         // DEGUB
         long drawTime = System.nanoTime();
         if (keyHandler.drawTime) {drawTime = System.nanoTime();}
 
+        // TITLE SCREEN
+        if (gameState == MENU_STATE) {
+            ui.draw(g2d);
+        } else {
+            // TILE
+            tileManager.draw(g2d);
 
-        // TILE
-        tileManager.draw(g2d);
-
-        // OBJECT
-        for (SuperObject superObject : obj) {
-            if (superObject != null) {
-                superObject.draw(g2d, this);
+            // OBJECT
+            for (SuperObject superObject : obj) {
+                if (superObject != null) {
+                    superObject.draw(g2d, this);
+                }
             }
-        }
 
-        // NPC
-        for (Entity entity : npc) {
-            if (entity != null) {
-                entity.draw(g2d);
+            // NPC
+            for (Entity entity : npc) {
+                if (entity != null) {
+                    entity.draw(g2d);
+                }
             }
+
+            // PLAYER
+            player.draw(g2d);
+
+            // BAR FOR INFORMATION
+            g2d.setColor(Color.BLACK);
+            g2d.fillRoundRect(10, 10, screenWidth - 20, 80, 10, 10);
+            g2d.setColor(Color.WHITE);
+            g2d.setStroke(new BasicStroke(5));
+            g2d.drawRoundRect(10, 10, screenWidth - 20, 80, 10, 10);
+
+            ui.draw(g2d);
         }
-
-        // PLAYER
-        player.draw(g2d);
-
-        // BAR FOR INFORMATION
-        g2d.setColor(Color.BLACK);
-        g2d.fillRoundRect(10, 10, screenWidth-20, 80, 10, 10);
-        g2d.setColor(Color.WHITE);
-        g2d.setStroke(new BasicStroke(5));
-        g2d.drawRoundRect(10, 10, screenWidth-20, 80, 10, 10);
-
-        ui.draw(g2d);
-
         if (keyHandler.drawTime) {
             long drawTime2 = System.nanoTime();
             long passedTime = drawTime2 - drawTime;
+            //BAR
+            g2d.setColor(Color.BLACK);
+            g2d.fillRoundRect(screenWidth-310, screenHeight-40, 300, 35, 10, 10);
             g2d.setColor(Color.WHITE);
-            g2d.setFont(new Font("Arial", Font.BOLD, 30));
-            g2d.drawString("Draw Time " + passedTime, screenWidth-283, screenHeight-10);
-            System.out.println("Draw Time " + passedTime);
-        }
+            g2d.setStroke(new BasicStroke(5));
+            g2d.drawRoundRect(screenWidth-310, screenHeight-40, 300, 35, 10, 10);
 
+            g2d.setFont(ui.mPixel.deriveFont(30F));
+            g2d.setColor(Color.BLACK);
+            g2d.drawString("Draw Time " + passedTime, screenWidth - 283, screenHeight - 13);
+            g2d.setColor(Color.WHITE);
+            g2d.drawString("Draw Time " + passedTime, screenWidth - 283, screenHeight - 13);
+        }
         g2d.dispose();
     }
 
@@ -171,7 +186,7 @@ public class GamePanel extends JPanel implements Runnable {
 
     }
 
-    public void stopMusic(int i) {
+    public void stopMusic() {
 
         music.stop();
     }
