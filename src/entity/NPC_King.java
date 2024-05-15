@@ -15,7 +15,7 @@ public class NPC_King extends Entity{
         super(gp);
         direction = "down";
         speed = 1;
-        solidArea = new Rectangle(0, 10, 48, 48);
+        solidArea = new Rectangle(0, 0, 48, 48);
 
         getNPCImage();
         setDialog();
@@ -79,6 +79,8 @@ public class NPC_King extends Entity{
         collisionOn = false;
         gp.cChecker.collisionCheckTile(this);
         gp.cChecker.checkPlayer(this);
+        int npcIndex = gp.cChecker.collisionCheckEntity(this, gp.npc);
+        int monsterIndex = gp.cChecker.collisionCheckEntity(this, gp.monsterArray);
         if (!collisionOn) {
             switch (direction) {
                 case "up": worldY -= speed; break;

@@ -2,11 +2,13 @@ package game;
 
 import entity.Entity;
 import entity.Player;
-import object.SuperObject;
 import tile.TileManager;
 
 import javax.swing.*;
 import java.awt.*;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 
 public class GamePanel extends JPanel implements Runnable {
     // SCREEN SETTINGS
@@ -35,13 +37,16 @@ public class GamePanel extends JPanel implements Runnable {
     public CollisionChecker cChecker = new CollisionChecker(this);
     public Sound music = new Sound();
     public Sound soundEffect = new Sound();
+    public EventHandler eventHandler = new EventHandler(this);
     public UI ui = new UI(this);
     public AssetSetter aSetter = new AssetSetter(this);
 
     // ENTITY AND OBJECT
     public Player player = new Player(this, keyHandler);
-    public SuperObject[] obj = new SuperObject[10];
+    public Entity[] obj = new Entity[10];
     public Entity[] npc = new Entity[10];
+    public Entity[] monsterArray = new Entity[20];
+    ArrayList<Entity> entityList = new ArrayList<Entity>();
 
     // GAME STATE
     public final int MENU_STATE = 0;
@@ -66,6 +71,8 @@ public class GamePanel extends JPanel implements Runnable {
 
         aSetter.setObject();
         aSetter.setNPC();
+        aSetter.setMonster();
+        playMusic(4);
     }
 
     public void startGameThread() {
@@ -112,10 +119,13 @@ public class GamePanel extends JPanel implements Runnable {
                     entity.update();
                 }
             }
-       }
-       if (gameState == PAUSE_STATE) {
-           // TODO LATER
-       }
+
+            for (Entity entity : monsterArray) {
+                if (entity != null) {
+                    entity.update();
+                }
+            }
+        }
     }
 
     public void paintComponent(Graphics g) {
@@ -133,22 +143,32 @@ public class GamePanel extends JPanel implements Runnable {
             // TILE
             tileManager.draw(g2d);
 
-            // OBJECT
-            for (SuperObject superObject : obj) {
-                if (superObject != null) {
-                    superObject.draw(g2d, this);
-                }
-            }
+            // ADD ENTITIES TO LIST
+            for (Entity NPC : npc)
+                if (NPC != null)
+                    entityList.add(NPC);
+            for (Entity OBJ : obj)
+                if (OBJ != null)
+                    entityList.add(OBJ);
+            for (Entity MONSTER : monsterArray)
+                if (MONSTER != null)
+                    entityList.add(MONSTER);
 
-            // NPC
-            for (Entity entity : npc) {
-                if (entity != null) {
-                    entity.draw(g2d);
+            // SORT
+            entityList.sort(new Comparator<Entity>() {
+                @Override
+                public int compare(Entity o1, Entity o2) {
+                    return (o1.worldY < o2.worldY) ? 1 : -1;
                 }
-            }
+            });
 
-            // PLAYER
+            //DRAW ENTITIES
+            for (int i = 0; i < entityList.size(); i++) {
+                entityList.get(i).draw(g2d);
+            }
             player.draw(g2d);
+            // EMPTY LIST
+            entityList.clear();
 
             // BAR FOR INFORMATION
             g2d.setColor(Color.BLACK);

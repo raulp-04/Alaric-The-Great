@@ -25,24 +25,36 @@ public class KeyHandler implements KeyListener {
         if (gp.gameState == gp.MENU_STATE) {
             if (code == KeyEvent.VK_W) {
                 gp.ui.command--;
-                if (gp.ui.command < 0) gp.ui.command = 2;
+                if (!UI.hasEnteredOnce) {
+                    if (gp.ui.command < 1) gp.ui.command = 4;
+                } else if (gp.ui.command < 0) gp.ui.command = 4;
             }
             if (code == KeyEvent.VK_S) {
                 gp.ui.command++;
-                if (gp.ui.command > 3) gp.ui.command = 0;
+                if (gp.ui.command > 4) gp.ui.command = 0;
             }
             if (code == KeyEvent.VK_ENTER) {
                 if (gp.ui.command == 0) {
-                    gp.gameState = gp.PLAY_STATE;
-                    gp.playMusic(0);
+                    if (UI.hasEnteredOnce) {
+                        gp.stopMusic();
+                        gp.gameState = gp.PLAY_STATE;
+                        gp.playMusic(0);
+                    }
                 }
                 if (gp.ui.command == 1) {
-                    // TODO LATER
+                    if (!UI.hasEnteredOnce) {UI.hasEnteredOnce = true; gp.ui.command=0;}
+                        gp.stopMusic();
+                        gp.gameState = gp.PLAY_STATE;
+                        gp.playMusic(0);
+
                 }
                 if (gp.ui.command == 2) {
+                    // TODO LATER
+                }
+                if (gp.ui.command == 3) {
                     gp.gameState = gp.CONTROL_STATE;
                 }
-                if (gp.ui.command == 3) exit(0);
+                if (gp.ui.command == 4) exit(0);
             }
         }
         else if (gp.gameState == gp.CONTROL_STATE) {
@@ -77,6 +89,7 @@ public class KeyHandler implements KeyListener {
             if (code == KeyEvent.VK_ESCAPE) {
                 gp.stopMusic();
                 gp.gameState = gp.MENU_STATE;
+                gp.playMusic(4);
             }
 
         }

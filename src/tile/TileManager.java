@@ -26,6 +26,7 @@ public class TileManager {
         try {
 
             BufferedImage img = ImageIO.read(getClass().getClassLoader().getResourceAsStream("tiles/tile-sheet.png"));
+            BufferedImage water = ImageIO.read(getClass().getClassLoader().getResourceAsStream("tiles/water.png"));
 
             tile[0] = new Tile(); // GRASS [0]
             tile[0].image = img.getSubimage(32, 94, 16, 16);
@@ -59,6 +60,14 @@ public class TileManager {
             tile[8] = new Tile();
             tile[8].image = img.getSubimage(32, 208, 16, 16);
             tile[8].collition = true;
+
+            tile[9] = new Tile();
+            tile[9].image = water.getSubimage(80, 16, 16, 16);
+            tile[9].collition = true;
+
+            tile[10] = new Tile();
+            tile[10].image = water.getSubimage(96, 16, 16, 16);
+            tile[10].collition = true;
 
         } catch (IOException e) {
             e.printStackTrace();

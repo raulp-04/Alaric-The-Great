@@ -1,5 +1,9 @@
 package game;
 
+import entity.Entity;
+import object.OBJ_Heart;
+
+
 import javax.imageio.ImageIO;
 import java.awt.*;
 import java.awt.image.BufferedImage;
@@ -16,7 +20,9 @@ public class UI {
     public String message = "";
     int messageCounter = 0;
     public String currentDialog = "";
-    public int command = 0;
+    public int command = 1;
+    public static boolean hasEnteredOnce = false;
+    public BufferedImage fullH, halfH, blankH;
 
     public UI(GamePanel gp) {
 
@@ -28,7 +34,11 @@ public class UI {
             e.printStackTrace();
         }
 
-
+        // CREATE OBJ
+        Entity heart = new OBJ_Heart(gp);
+        fullH = heart.image3;
+        halfH = heart.image2;
+        blankH = heart.image;
     }
 
     public void showMessage(String msg) {
@@ -61,6 +71,32 @@ public class UI {
         }
     }
 
+    public void drawPlayerLife(Graphics2D g2d) {
+        int x = gp.tileSize * 13 - 29;
+        int y = gp.tileSize - 22;
+        int i = 0;
+        // DRAW MAX HEART
+        while (i < gp.player.maxLife/2) {
+            g2d.drawImage(blankH, x, y-6, gp.tileSize+10, gp.tileSize+10, null);
+            i++;
+            x += gp.tileSize;
+        }
+
+        x = gp.tileSize * 13 - 29;
+        y = gp.tileSize - 22;
+        i = 0;
+        // DRAW CURRENT LIFE
+        while (i < gp.player.life) {
+            g2d.drawImage(halfH, x, y-6, gp.tileSize+10, gp.tileSize+10, null);
+            i++;
+            if (i < gp.player.life) {
+                g2d.drawImage(fullH, x, y-6, gp.tileSize+10, gp.tileSize+10, null);
+            }
+            i++;
+            x += gp.tileSize;
+        }
+    }
+
     public void drawPause(Graphics2D g2d) {
 
 
@@ -75,6 +111,8 @@ public class UI {
         g2d.setColor(Color.WHITE);
         g2d.setStroke(new BasicStroke(5));
         g2d.drawRoundRect(x-60, y-42, 180, 52, 10 ,10);
+        g2d.drawString("SCORE " + gp.player.hasGem, 25, 45);
+        g2d.drawString("KEYS " + gp.player.hasKey, 25, 75);
 
 
         g2d.setFont(g2d.getFont().deriveFont(50F));
@@ -103,6 +141,7 @@ public class UI {
         // PLAY STATE
         if (gp.gameState == gp.PLAY_STATE) {
            drawPlay(g2d);
+           drawPlayerLife(g2d);
         }
         // DIALOG STATE
         if (gp.gameState == gp.DIALOG_STATE) {
@@ -110,7 +149,9 @@ public class UI {
         }
         // PAUSE STATE
         if (gp.gameState == gp.PAUSE_STATE) {
-            drawPause(g2d);}
+            drawPause(g2d);
+            drawPlayerLife(g2d);
+        }
     }
     public void drawControl(Graphics2D g2d) {
         try {
@@ -205,6 +246,20 @@ public class UI {
         // MENU
         g2d.setFont(g2d.getFont().deriveFont(Font.BOLD, 48F));
 
+        if (hasEnteredOnce) {
+            menuTitle = "RESUME";
+            x = gp.tileSize;
+            y = gp.tileSize * 6;
+            g2d.setColor(Color.BLACK);
+            g2d.drawString(menuTitle, x + 5, y + 5);
+            g2d.setColor(Color.WHITE);
+            g2d.drawString(menuTitle, x, y);
+            if (command == 0) {
+                g2d.setColor(Color.GRAY);
+                g2d.drawString(menuTitle, x, y);
+            }
+        }
+
         menuTitle = "NEW GAME";
         x = gp.tileSize;
         y = gp.tileSize*7;
@@ -212,7 +267,7 @@ public class UI {
         g2d.drawString(menuTitle, x+5, y+5);
         g2d.setColor(Color.WHITE);
         g2d.drawString(menuTitle, x, y);
-        if (command == 0) {
+        if (command == 1) {
             g2d.setColor(Color.GRAY);
             g2d.drawString(menuTitle, x, y);
         }
@@ -224,7 +279,7 @@ public class UI {
         g2d.drawString(menuTitle, x+5, y+5);
         g2d.setColor(Color.WHITE);
         g2d.drawString(menuTitle, x, y);
-        if (command == 1) {
+        if (command == 2) {
             g2d.setColor(Color.GRAY);
             g2d.drawString(menuTitle, x, y);
         }
@@ -236,7 +291,7 @@ public class UI {
         g2d.drawString(menuTitle, x+5, y+5);
         g2d.setColor(Color.WHITE);
         g2d.drawString(menuTitle, x, y);
-        if (command == 2) {
+        if (command == 3) {
             g2d.setColor(Color.GRAY);
             g2d.drawString(menuTitle, x, y);
         }
@@ -248,7 +303,7 @@ public class UI {
         g2d.drawString(menuTitle, x+5, y+5);
         g2d.setColor(Color.WHITE);
         g2d.drawString(menuTitle, x, y);
-        if (command == 3) {
+        if (command == 4) {
             g2d.setColor(Color.GRAY);
             g2d.drawString(menuTitle, x, y);
         }

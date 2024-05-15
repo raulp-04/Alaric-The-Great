@@ -4,6 +4,8 @@ import entity.Entity;
 
 public class CollisionChecker {
 
+    public boolean contactPlayer = false;
+
     private final GamePanel gp;
 
     public CollisionChecker(GamePanel gp) {
@@ -137,6 +139,9 @@ public class CollisionChecker {
 
         for(int i = 0; i < target.length; i++) {
             if (target[i] != null) {
+                if (entity == target[i]){
+                    continue;
+                }
                 // get entity solid area pos.
                 entity.solidArea.x = entity.worldX + entity.solidArea.x;
                 entity.solidArea.y = entity.worldY + entity.solidArea.y;
@@ -186,8 +191,9 @@ public class CollisionChecker {
         return index;
    }
 
-   public void checkPlayer(Entity entity) {
+   public boolean checkPlayer(Entity entity) {
 
+        contactPlayer = false;
        // get entity solid area pos.
        entity.solidArea.x = entity.worldX + entity.solidArea.x;
        entity.solidArea.y = entity.worldY + entity.solidArea.y;
@@ -199,34 +205,29 @@ public class CollisionChecker {
        switch (entity.direction) {
            case "up":
                entity.solidArea.y -= entity.speed;
-               if(entity.solidArea.intersects(gp.player.solidArea)) {
-                   entity.collisionOn = true;
-               }
                break;
            case "down":
                entity.solidArea.y += entity.speed;
-               if(entity.solidArea.intersects(gp.player.solidArea)) {
-                   entity.collisionOn = true;
-               }
                break;
            case "left":
                entity.solidArea.x -= entity.speed;
-               if(entity.solidArea.intersects(gp.player.solidArea)) {
-                   entity.collisionOn = true;
-               }
                break;
            case "right":
                entity.solidArea.x += entity.speed;
-               if(entity.solidArea.intersects(gp.player.solidArea)) {
-                   entity.collisionOn = true;
-               }
                break;
        }
+
+       if(entity.solidArea.intersects(gp.player.solidArea)) {
+           entity.collisionOn = true;
+           contactPlayer = true;
+       }
+
        entity.solidArea.x = entity.solidAreaDefaultX;
        entity.solidArea.y = entity.solidAreaDefaultY;
        gp.player.solidArea.x = gp.player.solidAreaDefaultX;
        gp.player.solidArea.y = gp.player.solidAreaDefaultY;
 
+       return contactPlayer;
    }
 
 }

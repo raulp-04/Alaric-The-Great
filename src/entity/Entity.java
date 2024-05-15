@@ -6,23 +6,35 @@ import java.awt.*;
 import java.awt.image.BufferedImage;
 
 public class Entity {
+    // from superobj
+    public BufferedImage image, image2, image3;
+    public String name;
+    public boolean collision = false;
 
-    GamePanel gp;
+    public GamePanel gp;
     public int worldX, worldY;
     public int speed;
-    public String direction;
-    BufferedImage[] walkUp;
-    BufferedImage[] walkDown;
-    BufferedImage[] walkLeft;
-    BufferedImage[] walkRight;
-    int spriteCounter = 0;
-    int spriteNumber = 0;
+    public String direction = "down";
+    public BufferedImage[] walkUp;
+    public BufferedImage[] walkDown;
+    public BufferedImage[] walkLeft;
+    public BufferedImage[] walkRight;
+    public int spriteCounter = 0;
+    public int spriteNumber = 0;
     public Rectangle solidArea = new Rectangle(0, 0, 48, 48);
     public int solidAreaDefaultX, solidAreaDefaultY;
     public int actionLockCounter;
     public String[] dialog = new String[20];
     public int dialogIndex = 0;
     public boolean attacking = false;
+    public boolean invincible = false;
+    public int invincibleCounter = 0;
+
+    public int type;// 0- player; 1 - npc; 2 - monster;
+
+    // CARACTER STATUS
+    public int maxLife;
+    public int life;
 
     public boolean collisionOn = false;
 

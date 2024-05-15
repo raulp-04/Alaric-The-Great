@@ -47,10 +47,16 @@ public class Player extends Entity {
         getPlayerAttack();
     }
     public void setDefaultValues() {
+
         worldX = gp.tileSize * 30;
         worldY = gp.tileSize * 30;
         speed = 4;
         direction = "right";
+
+        // PLAYER STATUS
+        // LIFE
+        maxLife = 6;
+        life = maxLife;
     }
 
     public void getPlayerImage() {
@@ -118,8 +124,16 @@ public class Player extends Entity {
             int npcIndex = gp.cChecker.collisionCheckEntity(this, gp.npc);
             interactNPC(npcIndex);
 
+            // MONSTER NPC
+            int monsterIndex = gp.cChecker.collisionCheckEntity(this, gp.monsterArray);
+            interactMonster(monsterIndex);
+
+            // CHECK EVENT
+            gp.eventHandler.checkEvent();
+            gp.keyHandler.enterPressed = false;
+
             // CHECK COLLISION, FALSE MEANS MOVING
-            if (!collisionOn && !keyHandler.enterPressed) {
+            if (!collisionOn) {
                 switch (direction) {
                     case "up": worldY -= speed; break;
                     case "down": worldY += speed; break;
@@ -127,7 +141,6 @@ public class Player extends Entity {
                     case "right":  worldX += speed; break;
                 }
             }
-            gp.keyHandler.enterPressed = false;
 
             spriteCounter++;
             if (spriteCounter > 4) {
@@ -140,6 +153,13 @@ public class Player extends Entity {
             }
 
         }
+        if (invincible) {
+            invincibleCounter++;
+            if (invincibleCounter > 60) {
+                invincible = false;
+                invincibleCounter = 0;
+            }
+        }
     }
 
     public void attacking() {
@@ -150,13 +170,14 @@ public class Player extends Entity {
         }
         if(spriteCounter > 5 && spriteCounter <= 10) {
             spriteNumAt = 1;
+            if (spriteCounter == 6) gp.playSE(3);
+
         }
         if(spriteCounter > 10 && spriteCounter <= 15) {
             spriteNumAt = 2;
         }
         if(spriteCounter > 15 && spriteCounter <= 20) {
             spriteNumAt = 3;
-            if (spriteCounter == 16) gp.playSE(3);
         }
         if(spriteCounter > 20 && spriteCounter <= 25){
             spriteNumAt = 4;
@@ -176,6 +197,15 @@ public class Player extends Entity {
             } else gp.ui.showMessage("PRESS ENTER TO INTERACT");
         } else if (gp.keyHandler.enterPressed && hasSword) {
             attacking = true;
+        }
+    }
+
+    public void interactMonster(int index) {
+        if (index != gp.NO_COLLISION) {
+            if (!invincible) {
+                invincible = true;
+                life--;
+            }
         }
     }
 
@@ -265,6 +295,17 @@ public class Player extends Entity {
                 }
                 break;
         }
+        if (invincible) {
+            g2d.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 0.3f));
+        }
+
         g2d.drawImage(images, screenX, screenY, 96, 96, null);
+
+        g2d.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 1f));
+
+        // debug
+        g2d.setFont(new Font("Times New Roman", Font.PLAIN, 20));
+        g2d.setColor(Color.WHITE);
+        g2d.drawString("invincible = " + invincibleCounter, 10, 400);
     }
 }
