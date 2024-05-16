@@ -83,6 +83,7 @@ public class EventHandler {
         gp.gameState = gameState;
         gp.ui.currentDialog = "You fell into a pit";
         gp.player.life--;
+        gp.playSE(6);
 //        eventRect[col][row].eventDone = true;
         canTouchEvent = false;
     }
@@ -90,6 +91,7 @@ public class EventHandler {
         if (gp.keyHandler.enterPressed) {
             gp.gameState = gameState;
             gp.ui.currentDialog = "You drink water.. Life has been replenished";
+            gp.playSE(7);
             gp.player.life = gp.player.maxLife;
         }
     }

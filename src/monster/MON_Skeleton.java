@@ -97,6 +97,15 @@ public class MON_Skeleton extends Entity {
             } else {spriteNumber++;}
             spriteCounter = 0;
         }
+        if (invincible) {
+            invincibleCounter++;
+            speed = 0;
+            if (invincibleCounter > 30) {
+                invincible = false;
+                invincibleCounter = 0;
+                speed = 2;
+            }
+        }
     }
 
     @Override
@@ -117,10 +126,44 @@ public class MON_Skeleton extends Entity {
                 case "right" -> walkRight[spriteNumber];
                 default -> null;
             };
+            if (invincible) {
+                g2d.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 0.4f));
+            }
+            if (dying) {
+                dyingAnimation(g2d);
+            }
             g2d.drawImage(images, screenX, screenY, 96, 96, null);
-            g2d.setColor(Color.BLACK);
-            g2d.drawRect(screenX+ solidArea.x,screenY+ solidArea.y, solidArea.width, solidArea.height);
+            g2d.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 1f));
+
+            if (!alive) {
+
+            }
+
+//            g2d.setColor(Color.BLACK);
+//            g2d.drawRect(screenX+ solidArea.x,screenY+ solidArea.y, solidArea.width, solidArea.height);
 
         }
+    }
+
+    public void dyingAnimation(Graphics2D g2d) {
+        dyingCounter++;
+        short i = 5;
+        if (dyingCounter <= i) {changeAlpha(g2d, 0f);}
+        if (dyingCounter > i && dyingCounter <= i*2) {changeAlpha(g2d, 1f);}
+        if (dyingCounter > i*2 && dyingCounter <= i*3) {changeAlpha(g2d, 0f);}
+        if (dyingCounter > i*3 && dyingCounter <= i*4) {changeAlpha(g2d, 1f);}
+        if (dyingCounter > i*4 && dyingCounter <= i*5) {changeAlpha(g2d, 0f);if(dyingCounter==i*5)gp.playSE(5);}
+        if (dyingCounter > i*5 && dyingCounter <= i*6) {changeAlpha(g2d, 1f);}
+        if (dyingCounter > i*6 && dyingCounter <= i*7) {changeAlpha(g2d, 0f);}
+        if (dyingCounter > i*7 && dyingCounter <= i*8) {changeAlpha(g2d, 1f);}
+        if (dyingCounter > i*8) {
+            dying = false;
+            alive = false;
+
+        }
+    }
+
+    public void changeAlpha (Graphics2D g2d, float nr) {
+        g2d.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, nr));
     }
 }

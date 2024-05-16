@@ -9,6 +9,7 @@ import java.awt.*;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.Objects;
 
 public class GamePanel extends JPanel implements Runnable {
     // SCREEN SETTINGS
@@ -150,10 +151,11 @@ public class GamePanel extends JPanel implements Runnable {
             for (Entity OBJ : obj)
                 if (OBJ != null)
                     entityList.add(OBJ);
-            for (Entity MONSTER : monsterArray)
-                if (MONSTER != null)
-                    entityList.add(MONSTER);
-
+            for (int i = 0; i < Objects.requireNonNull(monsterArray).length; i++) {
+                if (monsterArray[i] != null)
+                    if (monsterArray[i].alive) entityList.add(monsterArray[i]);
+                    else {monsterArray[i] = null; player.hasGem += 200;}
+            }
             // SORT
             entityList.sort(new Comparator<Entity>() {
                 @Override

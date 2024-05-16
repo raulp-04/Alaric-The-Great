@@ -22,6 +22,7 @@ public class Entity {
     public int spriteCounter = 0;
     public int spriteNumber = 0;
     public Rectangle solidArea = new Rectangle(0, 0, 48, 48);
+    public Rectangle attackArea = new Rectangle(0, 0, 0, 0);
     public int solidAreaDefaultX, solidAreaDefaultY;
     public int actionLockCounter;
     public String[] dialog = new String[20];
@@ -29,6 +30,9 @@ public class Entity {
     public boolean attacking = false;
     public boolean invincible = false;
     public int invincibleCounter = 0;
+    public boolean alive = true;
+    public boolean dying = false;
+    public int dyingCounter;
 
     public int type;// 0- player; 1 - npc; 2 - monster;
 

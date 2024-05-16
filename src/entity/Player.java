@@ -38,9 +38,12 @@ public class Player extends Entity {
         screenX = gp.screenWidth / 2 - (gp.tileSize);
         screenY = gp.screenHeight / 2 - (gp.tileSize);
 
-        solidArea = new Rectangle(40, 55, 16, 16);
+        solidArea = new Rectangle(12*3, 10*3, 9*3, 14*3);
         solidAreaDefaultX = solidArea.x;
         solidAreaDefaultY = solidArea.y;
+
+        attackArea.width = 9*3;
+        attackArea.height = 14*3;
 
         setDefaultValues();
         getPlayerImage();
@@ -130,10 +133,9 @@ public class Player extends Entity {
 
             // CHECK EVENT
             gp.eventHandler.checkEvent();
-            gp.keyHandler.enterPressed = false;
 
             // CHECK COLLISION, FALSE MEANS MOVING
-            if (!collisionOn) {
+            if (!collisionOn && !attacking && !gp.keyHandler.enterPressed) {
                 switch (direction) {
                     case "up": worldY -= speed; break;
                     case "down": worldY += speed; break;
@@ -172,6 +174,29 @@ public class Player extends Entity {
             spriteNumAt = 1;
             if (spriteCounter == 6) gp.playSE(3);
 
+            int currentWorldX = worldX;
+            int currentWorldY = worldY;
+            int solidAreaWidth = solidArea.width;
+            int solidAreaHeight = solidArea.height;
+
+            switch (direction) {
+                case "up": worldY -= attackArea.width; break;
+                case "down": worldY += attackArea.width; break;
+                case "left": worldX -= attackArea.width; break;
+                case "right": worldX += attackArea.width; break;
+            }
+
+            solidArea.width = attackArea.width;
+            solidArea.height = attackArea.height;
+
+            int monsterIndex = gp.cChecker.collisionCheckEntity(this, gp.monsterArray);
+            damageMonster(monsterIndex);
+
+            worldX = currentWorldX;
+            worldY = currentWorldY;
+            solidArea.width = solidAreaWidth;
+            solidArea.height = solidAreaHeight;
+
         }
         if(spriteCounter > 10 && spriteCounter <= 15) {
             spriteNumAt = 2;
@@ -205,6 +230,21 @@ public class Player extends Entity {
             if (!invincible) {
                 invincible = true;
                 life--;
+                gp.playSE(6);
+            }
+        }
+    }
+
+    public void damageMonster(int index) {
+        if(index != gp.NO_COLLISION) {
+            if (!gp.monsterArray[index].invincible) {
+                gp.monsterArray[index].invincible = true;
+                gp.monsterArray[index].life -= 2;
+
+                if(gp.monsterArray[index].life <= 0) {
+                    gp.monsterArray[index].dying = true;
+
+                }
             }
         }
     }
@@ -304,8 +344,18 @@ public class Player extends Entity {
         g2d.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 1f));
 
         // debug
-        g2d.setFont(new Font("Times New Roman", Font.PLAIN, 20));
-        g2d.setColor(Color.WHITE);
-        g2d.drawString("invincible = " + invincibleCounter, 10, 400);
+//        g2d.setColor(Color.white);
+//        g2d.drawRect(screenX+ solidArea.x,screenY+ solidArea.y, solidArea.width, solidArea.height);
+//
+//        g2d.drawRect(screenX+ solidArea.x+attackArea.width,screenY+ solidArea.y, solidArea.width, solidArea.height);
+//        g2d.drawRect(screenX+ solidArea.x - attackArea.width,screenY+ solidArea.y, solidArea.width, solidArea.height);
+//
+//        g2d.drawRect(screenX+ solidArea.x,screenY+ solidArea.y+attackArea.width*2-12, solidArea.width, solidArea.width);
+//        g2d.drawRect(screenX+ solidArea.x,screenY+ solidArea.y-attackArea.width, solidArea.width, solidArea.width);
+
+
+//        g2d.setFont(new Font("Times New Roman", Font.PLAIN, 20));
+//        g2d.setColor(Color.WHITE);
+//        g2d.drawString("invincible = " + invincibleCounter, 10, 400);
     }
 }
