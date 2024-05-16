@@ -9,7 +9,6 @@ import java.util.Objects;
 import java.util.Random;
 
 public class NPC_King extends Entity{
-
     public NPC_King(GamePanel gp) {
 
         super(gp);
@@ -20,7 +19,6 @@ public class NPC_King extends Entity{
         getNPCImage();
         setDialog();
     }
-
     public void getNPCImage() {
 
         try {
@@ -34,21 +32,16 @@ public class NPC_King extends Entity{
             e.printStackTrace();
         }
     }
-
     public void setDialog() {
 
         dialog[0] = "Hello, Alaric.";
         dialog[1] = "I am king Arthur";
         dialog[2] = "You must retrieve the ancient crown";
     }
-
-    @Override
-    public void speak() {
+    @Override public void speak() {
         super.speak();
     }
-
-    @Override
-    public void setAction() {
+    @Override public void setAction() {
 
         actionLockCounter++;
         if (actionLockCounter == 80) {
@@ -70,9 +63,7 @@ public class NPC_King extends Entity{
             actionLockCounter = 0;
         }
     }
-
-    @Override
-    public void update() {
+    @Override public void update() {
 
         setAction();
 

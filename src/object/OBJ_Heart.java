@@ -9,7 +9,6 @@ import java.io.IOException;
 import java.util.Objects;
 
 public class OBJ_Heart extends Entity {
-
     public OBJ_Heart(GamePanel gp) {
         super(gp);
         name = "Heart";

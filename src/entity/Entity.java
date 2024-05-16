@@ -5,8 +5,8 @@ import game.GamePanel;
 import java.awt.*;
 import java.awt.image.BufferedImage;
 
-public class Entity {
-    // from superobj
+public abstract class Entity {
+    /*from superobj*/
     public BufferedImage image, image2, image3;
     public String name;
     public boolean collision = false;
@@ -45,7 +45,6 @@ public class Entity {
     public Entity(GamePanel gp) {
         this.gp = gp;
     }
-
     public BufferedImage[] cutImage(BufferedImage img, int x, int y, int []width, int []height) {
         BufferedImage[] images = new BufferedImage[width.length];
         for (int i = 0; i < width.length; i++) {
@@ -54,7 +53,6 @@ public class Entity {
         }
         return images;
     }
-
     public void setAction() {}
     public void speak() {
 
@@ -78,8 +76,18 @@ public class Entity {
                 break;
         }
     }
+    public void checkDrop() {  }
+    public void dropItem(Entity droppedItem) {
+        for (int i = 0; i < gp.obj[gp.currentMap].length; i++) {
+            if (gp.obj[gp.currentMap][i] == null) {
+                gp.obj[gp.currentMap][i] = droppedItem;
+                gp.obj[gp.currentMap][i].worldX = this.worldX; // Dead monster coord.
+                gp.obj[gp.currentMap][i].worldY = this.worldY;
+                break;
+            }
+        }
+    }
     public void update() {}
-
     public BufferedImage mirrorImage(BufferedImage img) {
         // Get source image dimension
         int width = img.getWidth();
@@ -99,7 +107,6 @@ public class Entity {
 
         return mImg;
     }
-
     public void draw(Graphics2D g2d) {
 
         int screenX = worldX - gp.player.worldX + gp.player.screenX;

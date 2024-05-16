@@ -8,7 +8,6 @@ import java.awt.image.BufferedImage;
 import java.io.IOException;
 
 public class OBJ_Sword extends Entity {
-
     public OBJ_Sword(GamePanel gp) {
         super(gp);
         walkDown = new BufferedImage[1];

@@ -6,7 +6,6 @@ import javax.sound.sampled.Clip;
 import java.net.URL;
 
 public class Sound {
-
     Clip clip;
     URL[] soundURL = new URL[30];
 
@@ -19,6 +18,8 @@ public class Sound {
         soundURL[5] = getClass().getResource("/sound/skeleton-death.wav");
         soundURL[6] = getClass().getResource("/sound/alaric-hurt.wav");
         soundURL[7] = getClass().getResource("/sound/drinking.wav");
+        soundURL[8] = getClass().getResource("/sound/game-over.wav");
+        soundURL[9] = getClass().getResource("/sound/walk.wav");
     }
     public void setFile(int i) {
 
@@ -32,17 +33,14 @@ public class Sound {
             e.printStackTrace();
         }
     }
-
     public void play() {
 
         clip.start();
     }
-
     public void loop() {
 
         clip.loop(Clip.LOOP_CONTINUOUSLY);
     }
-
     public void stop() {
 
         clip.stop();

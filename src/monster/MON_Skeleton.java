@@ -2,6 +2,9 @@ package monster;
 
 import entity.Entity;
 import game.GamePanel;
+import object.OBJ_Cherry;
+import object.OBJ_Gems;
+import object.OBJ_Key;
 
 import javax.imageio.ImageIO;
 import java.awt.*;
@@ -25,7 +28,6 @@ public class MON_Skeleton extends Entity {
         solidAreaDefaultY = solidArea.y;
         getImage();
     }
-
     public void getImage(){
         try {
             BufferedImage img = ImageIO.read(Objects.requireNonNull(getClass().getClassLoader().getResourceAsStream("monster/Skeleton.png")));
@@ -40,7 +42,6 @@ public class MON_Skeleton extends Entity {
             e.printStackTrace();
         }
     }
-
     public void setAction() {
 
         actionLockCounter++;
@@ -63,22 +64,22 @@ public class MON_Skeleton extends Entity {
             actionLockCounter = 0;
         }
     }
-
-    @Override
-    public void update() {
+    @Override public void update() {
 
         setAction();
 
         collisionOn = false;
         gp.cChecker.collisionCheckTile(this);
         boolean contactPlayer = gp.cChecker.checkPlayer(this);
-        int npcIndex = gp.cChecker.collisionCheckEntity(this, gp.npc);
-        int monsterIndex = gp.cChecker.collisionCheckEntity(this, gp.monsterArray);
+        gp.cChecker.collisionCheckEntity(this, gp.npc);
+        gp.cChecker.collisionCheckEntity(this, gp.monsterArray);
 
         if (contactPlayer) {
             if (!gp.player.invincible) {
                 gp.player.life--;
+                gp.playSE(6);
                 gp.player.invincible = true;
+                gp.ui.showMessage("LIFE DECREASED");
             }
         }
 
@@ -107,9 +108,7 @@ public class MON_Skeleton extends Entity {
             }
         }
     }
-
-    @Override
-    public void draw(Graphics2D g2d) {
+    @Override public void draw(Graphics2D g2d) {
 
         int screenX = worldX - gp.player.worldX + gp.player.screenX;
         int screenY = worldY - gp.player.worldY + gp.player.screenY;
@@ -144,7 +143,6 @@ public class MON_Skeleton extends Entity {
 
         }
     }
-
     public void dyingAnimation(Graphics2D g2d) {
         dyingCounter++;
         short i = 5;
@@ -157,13 +155,18 @@ public class MON_Skeleton extends Entity {
         if (dyingCounter > i*6 && dyingCounter <= i*7) {changeAlpha(g2d, 0f);}
         if (dyingCounter > i*7 && dyingCounter <= i*8) {changeAlpha(g2d, 1f);}
         if (dyingCounter > i*8) {
-            dying = false;
             alive = false;
 
         }
     }
-
     public void changeAlpha (Graphics2D g2d, float nr) {
         g2d.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, nr));
+    }
+    @Override public void checkDrop() {
+        int i = new Random().nextInt(100)+1;
+        // TYPE OF DROP
+        if (i < 40) dropItem(new OBJ_Gems(gp));
+        else if (i>40 && i<=60 ) dropItem(new OBJ_Cherry(gp));
+        else dropItem(new OBJ_Key(gp));
     }
 }

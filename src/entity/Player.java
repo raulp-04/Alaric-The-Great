@@ -11,7 +11,6 @@ import java.util.Objects;
 import java.util.Random;
 
 public class Player extends Entity {
-
     KeyHandler keyHandler;
     public final int screenX;
     public final int screenY;
@@ -51,8 +50,12 @@ public class Player extends Entity {
     }
     public void setDefaultValues() {
 
+        invincible = false;
+        hasSword = false;
+        hasKey = 0;
+        hasGem = 0;
         worldX = gp.tileSize * 30;
-        worldY = gp.tileSize * 30;
+        worldY = gp.tileSize * 28;
         speed = 4;
         direction = "right";
 
@@ -61,7 +64,6 @@ public class Player extends Entity {
         maxLife = 6;
         life = maxLife;
     }
-
     public void getPlayerImage() {
 
         try {
@@ -85,7 +87,6 @@ public class Player extends Entity {
             e.printStackTrace();
         }
     }
-
     public void getPlayerAttack() {
         //17
         try {
@@ -100,7 +101,6 @@ public class Player extends Entity {
             e.printStackTrace();
         }
     }
-
     public void update() {
         if (attacking && hasSword) {
             attacking();
@@ -162,8 +162,15 @@ public class Player extends Entity {
                 invincibleCounter = 0;
             }
         }
-    }
 
+        if (life <= 0) {
+            gp.gameState = gp.GAMEOVER_STATE;
+            gp.ui.command = -1;
+            gp.stopMusic();
+            gp.playMusic(8);
+        }
+
+    }
     public void attacking() {
 
         spriteCounter++;
@@ -213,61 +220,58 @@ public class Player extends Entity {
             attacking = false;
         }
     }
-
     public void interactNPC(int index) {
         if (index != gp.NO_COLLISION) {
             if (gp.keyHandler.enterPressed) {
                 gp.gameState = gp.DIALOG_STATE;
-                gp.npc[index].speak();
+                gp.npc[gp.currentMap][index].speak();
             } else gp.ui.showMessage("PRESS ENTER TO INTERACT");
         } else if (gp.keyHandler.enterPressed && hasSword) {
             attacking = true;
         }
     }
-
     public void interactMonster(int index) {
         if (index != gp.NO_COLLISION) {
-            if (!invincible) {
+            if (!invincible && !gp.monsterArray[gp.currentMap][index].dying) {
+                gp.playSE(6);
                 invincible = true;
                 life--;
-                gp.playSE(6);
+                gp.ui.showMessage("LIFE DECREASED");
             }
         }
     }
-
     public void damageMonster(int index) {
         if(index != gp.NO_COLLISION) {
-            if (!gp.monsterArray[index].invincible) {
-                gp.monsterArray[index].invincible = true;
-                gp.monsterArray[index].life -= 2;
+            if (!gp.monsterArray[gp.currentMap][index].invincible) {
+                gp.monsterArray[gp.currentMap][index].invincible = true;
+                gp.monsterArray[gp.currentMap][index].life -= 2;
 
-                if(gp.monsterArray[index].life <= 0) {
-                    gp.monsterArray[index].dying = true;
+                if(gp.monsterArray[gp.currentMap][index].life <= 0) {
+                    gp.monsterArray[gp.currentMap][index].dying = true;
 
                 }
             }
         }
     }
-
     public void pickUpObj(int index) {
         if (index != gp.NO_COLLISION) {
-            String name = gp.obj[index].name;
+            String name = gp.obj[gp.currentMap][index].name;
             switch (name) {
                 case "Gem":
                     hasGem += 100;
-                    gp.obj[index] = null;
+                    gp.obj[gp.currentMap][index] = null;
                     gp.ui.showMessage("PICKED UP GEM");
                     gp.playSE(2);
                     break;
                 case "Sword":
                     hasSword = true;
-                    gp.obj[index] = null;
+                    gp.obj[gp.currentMap][index] = null;
                     gp.ui.showMessage("PICKED UP SWORD AND SHIELD");
                     gp.playSE(2);
                     break;
                 case "Key":
                     hasKey += 1;
-                    gp.obj[index] = null;
+                    gp.obj[gp.currentMap][index] = null;
                     gp.ui.showMessage("PICKED UP A KEY");
                     gp.playSE(2);
                     break;
@@ -275,7 +279,7 @@ public class Player extends Entity {
                     if(hasKey>0) {
                         hasKey--;
                         gp.ui.showMessage("USED A KEY");
-                        gp.obj[index] = null;
+                        gp.obj[gp.currentMap][index] = null;
                         Random rand = new Random();
                         int gemNum = rand.nextInt(900)+101;
                         hasGem += gemNum;
@@ -283,12 +287,17 @@ public class Player extends Entity {
                         gp.playSE(1);
                     } else gp.ui.showMessage("YOU NEED A KEY TO OPEN");
                     break;
+                case "Cherry":
+                    if (life + 3 > maxLife) {
+                        life = maxLife;
+                    } else life += 3;
+                    gp.obj[gp.currentMap][index] = null;
+                    gp.ui.showMessage("LIFE INCREASED");
+                    gp.playSE(7);
             }
         }
     }
-
-    @Override
-    public void draw(Graphics2D g2d) {
+    @Override public void draw(Graphics2D g2d) {
         BufferedImage images = null;
 
         switch (direction) {

@@ -10,17 +10,17 @@ import java.io.*;
 public class TileManager {
     GamePanel gp;
     public Tile[] tile;
-    public int[][] mapTileNum;
+    public int[][][] mapTileNum;
 
     public TileManager(GamePanel gp) {
         this.gp = gp;
         tile = new Tile[100];
-        mapTileNum = new int[gp.maxWorldCol][gp.maxWorldRow];
+        mapTileNum = new int[gp.maxMap][gp.maxWorldCol][gp.maxWorldRow];
 
         getTileImage();
-        loadMap("res/maps/map01.txt");
+        loadMap("res/maps/map01.txt", 1);
+        loadMap("res/maps/map02.txt", 2);
     }
-
     public void getTileImage() {
 
         try {
@@ -50,9 +50,9 @@ public class TileManager {
             tile[5].collition = true;
 
             // GRASS AND DIRT
-                // BOTTOM COMBINATION [6]
+                // castle floor
             tile[6] = new Tile();
-            tile[6].image = img.getSubimage(33, 82, 16, 16);
+            tile[6].image = img.getSubimage(16, 192, 16, 16);
                 // TOP COMBINATION [7]
             tile[7] = new Tile();
             tile[7].image = img.getSubimage(33, 110, 16, 16);
@@ -69,12 +69,13 @@ public class TileManager {
             tile[10].image = water.getSubimage(96, 16, 16, 16);
             tile[10].collition = true;
 
+
+
         } catch (IOException e) {
             e.printStackTrace();
         }
     }
-
-    public void loadMap(String filePath) {
+    public void loadMap(String filePath, int map) {
         try {
             InputStream reader = new FileInputStream(filePath);
             BufferedReader br = new BufferedReader(new InputStreamReader(reader));
@@ -87,7 +88,7 @@ public class TileManager {
                 while (col < gp.maxWorldCol) {
                     String[] split = line.split(" ");
                     int number = Integer.parseInt(split[col]);
-                    mapTileNum[col][row] = number;
+                    mapTileNum[map][col][row] = number;
                     col++;
                 }
                 if (col == gp.maxWorldCol) {
@@ -102,7 +103,6 @@ public class TileManager {
             e.printStackTrace();
         }
     }
-
     public void draw(Graphics2D g2d) {
 
         int worldCol = 0;
@@ -110,7 +110,7 @@ public class TileManager {
 
 
         while (worldCol < gp.maxWorldCol && worldRow < gp.maxWorldRow) {
-            int tileNum = mapTileNum[worldCol][worldRow];
+            int tileNum = mapTileNum[gp.currentMap][worldCol][worldRow];
 
             int worldX = worldCol * gp.tileSize;
             int worldY = worldRow * gp.tileSize;

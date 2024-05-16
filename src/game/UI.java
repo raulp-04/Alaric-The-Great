@@ -12,7 +12,6 @@ import java.io.InputStream;
 import java.util.Objects;
 
 public class UI {
-
     Graphics2D g2d;
     GamePanel gp;
     Font mPixel;
@@ -40,12 +39,10 @@ public class UI {
         halfH = heart.image2;
         blankH = heart.image;
     }
-
     public void showMessage(String msg) {
         message = msg;
         messageOn = true;
     }
-
     public void drawPlay(Graphics2D g2d) {
         g2d.setFont(mPixel);
         g2d.setFont(g2d.getFont().deriveFont(30F));
@@ -70,7 +67,6 @@ public class UI {
             }
         }
     }
-
     public void drawPlayerLife(Graphics2D g2d) {
         int x = gp.tileSize * 13 - 29;
         int y = gp.tileSize - 22;
@@ -96,7 +92,6 @@ public class UI {
             x += gp.tileSize;
         }
     }
-
     public void drawPause(Graphics2D g2d) {
 
 
@@ -118,7 +113,6 @@ public class UI {
         g2d.setFont(g2d.getFont().deriveFont(50F));
         g2d.drawString(text, x-50, y+2);
     }
-
     public void drawDialog(Graphics2D g2d) {
 
         // WINDOW
@@ -126,7 +120,6 @@ public class UI {
         g2d.setFont(g2d.getFont().deriveFont(30F));
         g2d.drawString(currentDialog, 25 ,45);
     }
-
     public void draw(Graphics2D g2d) {
 
         this.g2d = g2d;
@@ -151,6 +144,10 @@ public class UI {
         if (gp.gameState == gp.PAUSE_STATE) {
             drawPause(g2d);
             drawPlayerLife(g2d);
+        }
+        // GAME OVER STATE
+        if (gp.gameState == gp.GAMEOVER_STATE) {
+            drawGameOver(g2d);
         }
     }
     public void drawControl(Graphics2D g2d) {
@@ -316,5 +313,60 @@ public class UI {
 
         return gp.screenWidth/2 - length/2;
     }
-
+    public void drawGameOver(Graphics2D g2d) {
+        g2d.setColor(new Color(0, 0, 0, 150));
+        g2d.fillRect(0, 0, gp.screenWidth, gp.screenHeight);
+        int x;
+        int y;
+        String text;
+        g2d.setFont(mPixel);
+        g2d.setFont(g2d.getFont().deriveFont(Font.BOLD, 80f));
+        text = "GAME OVER";
+        g2d.setColor(Color.gray);
+        //shadow
+        x = getXforCenter(text);
+        y = gp.tileSize*2 - 15;
+        g2d.drawString(text, x, y);
+        //main
+        g2d.setColor(Color.WHITE);
+        g2d.drawString(text, x-4, y-4);
+        //retry
+        g2d.setFont(g2d.getFont().deriveFont(Font.BOLD, 48f));
+        x = gp.tileSize;
+        y = gp.tileSize*8;
+        text = "RETRY";
+        g2d.setColor(Color.black);
+        g2d.drawString(text, x, y);
+        g2d.setColor(Color.WHITE);
+        g2d.drawString(text, x-4, y-4);
+        if (command == 1) {
+            g2d.setColor(Color.gray);
+            g2d.drawString(text, x-4, y-4);
+        }
+        //titlescreen
+        hasEnteredOnce = false;
+        x = gp.tileSize;
+        y = gp.tileSize*9;
+        text = "BACK TO MENU";
+        g2d.setColor(Color.black);
+        g2d.drawString(text, x, y);
+        g2d.setColor(Color.WHITE);
+        g2d.drawString(text, x-4, y-4);
+        if (command == 2) {
+            g2d.setColor(Color.gray);
+            g2d.drawString(text, x-4, y-4);
+        }
+        //quit
+        x = gp.tileSize;
+        y = gp.tileSize*10;
+        text = "QUIT";
+        g2d.setColor(Color.black);
+        g2d.drawString(text, x, y);
+        g2d.setColor(Color.WHITE);
+        g2d.drawString(text, x-4, y-4);
+        if (command == 3) {
+            g2d.setColor(Color.gray);
+            g2d.drawString(text, x-4, y-4);
+        }
+    }
 }

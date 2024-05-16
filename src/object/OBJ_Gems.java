@@ -9,7 +9,6 @@ import game.GamePanel;
 import tile.Tile;
 
 public class OBJ_Gems extends Entity {
-
     public OBJ_Gems(GamePanel gp) {
         super(gp);
         name = "Gem";
