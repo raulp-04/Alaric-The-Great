@@ -39,7 +39,7 @@ public class KeyHandler implements KeyListener {
                     if (!UI.hasEnteredOnce) {UI.hasEnteredOnce = true; gp.ui.command=0;}
                         gp.stopMusic();
                         gp.gameState = gp.PLAY_STATE;
-                        gp.retry();
+                        gp.restart();
                 }
                 if (gp.ui.command == 2) {
                     // TODO LATER

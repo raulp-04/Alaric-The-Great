@@ -52,10 +52,10 @@ public class UI {
 
         if (messageOn) {
             g2d.setColor(Color.BLACK);
-            g2d.fillRoundRect(15, 100, 225, 35, 10, 10);
+            g2d.fillRoundRect(15, 100, 250, 35, 10, 10);
             g2d.setColor(Color.WHITE);
             g2d.setStroke(new BasicStroke(5));
-            g2d.drawRoundRect(15, 100, 225, 35, 10, 10);
+            g2d.drawRoundRect(15, 100, 250, 35, 10, 10);
 
             g2d.setFont(g2d.getFont().deriveFont(15F));
             g2d.drawString(message, 25, 123);
@@ -65,6 +65,19 @@ public class UI {
                 messageCounter = 0;
                 messageOn = false;
             }
+        }
+        g2d.setColor(Color.BLACK);
+        g2d.fillRoundRect(5, gp.screenHeight-40, 120, 35, 10, 10);
+        g2d.setColor(Color.WHITE);
+        g2d.setStroke(new BasicStroke(5));
+        g2d.drawRoundRect(5, gp.screenHeight-40, 120, 35, 10, 10);
+        g2d.setFont(g2d.getFont().deriveFont(30F));
+        switch (gp.currentMap) {
+            case 1: g2d.drawString("LEVEL " + gp.currentMap, 15, gp.screenHeight-13); break;
+            case 2: g2d.drawString("LEVEL " + gp.currentMap, 15, gp.screenHeight-13); break;
+            case 3: g2d.drawString("LEVEL " + gp.currentMap, 15, gp.screenHeight-13); break;
+            case 4: g2d.drawString("LEVEL " + gp.currentMap, 15, gp.screenHeight-13); break;
+
         }
     }
     public void drawPlayerLife(Graphics2D g2d) {
@@ -199,7 +212,7 @@ public class UI {
         g2d.setColor(Color.WHITE);
         g2d.drawString(menuTitle, x, y);
 
-        menuTitle = "T to show draw time";
+        menuTitle = "T for debug information";
         x = gp.tileSize;
         y = gp.tileSize*9;
         g2d.setColor(Color.BLACK);

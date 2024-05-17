@@ -20,6 +20,8 @@ public class TileManager {
         getTileImage();
         loadMap("res/maps/map01.txt", 1);
         loadMap("res/maps/map02.txt", 2);
+        loadMap("res/maps/map03.txt", 3);
+        loadMap("res/maps/map04.txt", 4);
     }
     public void getTileImage() {
 

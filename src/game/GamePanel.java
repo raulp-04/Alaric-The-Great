@@ -196,11 +196,17 @@ public class GamePanel extends JPanel implements Runnable {
             g2d.setColor(Color.BLACK);
             g2d.drawString("Draw Time " + passedTime, screenWidth - 283, screenHeight - 13);
             g2d.setColor(Color.WHITE);
+
+            g2d.setColor(Color.BLACK);
+            g2d.fillRoundRect(screenWidth-220, screenHeight*3/4-35, 210, 130, 10, 10);
+            g2d.setColor(Color.WHITE);
+            g2d.setStroke(new BasicStroke(5));
+            g2d.drawRoundRect(screenWidth-220, screenHeight*3/4-35, 210, 130, 10, 10);
             g2d.drawString("Draw Time " + passedTime, screenWidth - 283, screenHeight - 13);
-            g2d.drawString("WorldX  " + player.worldX, 10, screenHeight/2);
-            g2d.drawString("WorldY  " + player.worldY, 10, screenHeight/2+30);
-            g2d.drawString("Col  " + (player.worldX+player.solidArea.x)/tileSize, 10, screenHeight/2+60);
-            g2d.drawString("Row  " + (player.worldY+player.solidArea.y)/tileSize, 10, screenHeight/2+90);
+            g2d.drawString("WorldX  " + player.worldX, screenWidth-215, screenHeight*3/4-5);
+            g2d.drawString("WorldY  " + player.worldY, screenWidth-215, screenHeight*3/4+25);
+            g2d.drawString("Col  " + (player.worldX+player.solidArea.x)/tileSize, screenWidth-215, screenHeight*3/4+55);
+            g2d.drawString("Row  " + (player.worldY+player.solidArea.y)/tileSize, screenWidth-215, screenHeight*3/4+85);
         }
         g2d.dispose();
     }
@@ -221,12 +227,19 @@ public class GamePanel extends JPanel implements Runnable {
         soundEffect.play();
     }
     public void retry() {
+        player.setDefaultPos();
+        aSetter.setNPC();
+        aSetter.setMonster();
+        stopMusic();
+        playMusic(0);
+    }
+    public void restart() {
         player.setDefaultValues();
         aSetter.setObject();
         aSetter.setNPC();
         aSetter.setMonster();
         stopMusic();
         playMusic(0);
+        currentMap = 1;
     }
-    public void restart() {} // TODO LATER
 }

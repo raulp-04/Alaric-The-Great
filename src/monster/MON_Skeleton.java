@@ -4,7 +4,6 @@ import entity.Entity;
 import game.GamePanel;
 import object.OBJ_Cherry;
 import object.OBJ_Gems;
-import object.OBJ_Key;
 
 import javax.imageio.ImageIO;
 import java.awt.*;
@@ -43,19 +42,17 @@ public class MON_Skeleton extends Entity {
         }
     }
     public void setAction() {
-
         actionLockCounter++;
         if (actionLockCounter == 80) {
             Random random = new Random();
             int i = random.nextInt(100) + 1;
-
             if (i <= 25) {
                 direction = "up";
             }
             if (i > 25 && i <= 50) {
                 direction = "down";
             }
-            if (i > 50 && i <= 75 ) {
+            if (i > 50 && i <= 75) {
                 direction = "left";
             }
             if (i > 75) {
@@ -69,6 +66,7 @@ public class MON_Skeleton extends Entity {
         setAction();
 
         collisionOn = false;
+        gp.cChecker.collisionCheckObject(this, true);
         gp.cChecker.collisionCheckTile(this);
         boolean contactPlayer = gp.cChecker.checkPlayer(this);
         gp.cChecker.collisionCheckEntity(this, gp.npc);
@@ -165,8 +163,53 @@ public class MON_Skeleton extends Entity {
     @Override public void checkDrop() {
         int i = new Random().nextInt(100)+1;
         // TYPE OF DROP
-        if (i < 40) dropItem(new OBJ_Gems(gp));
-        else if (i>40 && i<=60 ) dropItem(new OBJ_Cherry(gp));
-        else dropItem(new OBJ_Key(gp));
+        if (i <= 90 && i > 60) dropItem(new OBJ_Gems(gp));
+        else if (i>90 && i<=100 ) dropItem(new OBJ_Cherry(gp));
     }
 }
+/*public void setAction() {
+    if (gp.currentMap == THE MAP NEEDED) {
+        int playerX = gp.player.worldX;
+        int playerY = gp.player.worldY;
+        int distX = abs(worldX - playerX);
+        int distY = abs(worldY - playerY);
+
+        if (distX > distY) {
+            // Move on x axis
+            if (worldX < playerX) {
+                direction = "right";
+            } else if (worldX > playerX) {
+                direction = "left";
+            }
+        } else {
+            if (worldY < playerY) {
+                direction = "down";
+            } else {
+                direction = "up";
+            }
+        }
+
+    } else {
+        // If not visible move randomly
+        actionLockCounter++;
+        if (actionLockCounter == 80) {
+            Random random = new Random();
+            int i = random.nextInt(100) + 1;
+
+            if (i <= 25) {
+                direction = "up";
+            }
+            if (i > 25 && i <= 50) {
+                direction = "down";
+            }
+            if (i > 50 && i <= 75) {
+                direction = "left";
+            }
+            if (i > 75) {
+                direction = "right";
+            }
+            actionLockCounter = 0;
+        }
+    }
+}
+*/ // CODE FOR AI TRACKING PLAYER

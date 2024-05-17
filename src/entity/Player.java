@@ -64,6 +64,31 @@ public class Player extends Entity {
         maxLife = 6;
         life = maxLife;
     }
+    public void setDefaultPos(){
+        life = maxLife;
+        switch (gp.currentMap) {
+            case 1: {
+                worldX = gp.tileSize * 30;
+                worldY = gp.tileSize * 28;
+                break;
+            }
+            case 2:  {
+                worldX = gp.tileSize * 31+23;
+                worldY = gp.tileSize * 33;
+                break;
+            }
+            case 3:  {
+                worldX = gp.tileSize * 9+23;
+                worldY = gp.tileSize * 14;
+                break;
+            }
+            case 4:  {
+                worldX = gp.tileSize * 31+23;
+                worldY = gp.tileSize * 32;
+                break;
+            }
+        }
+    }
     public void getPlayerImage() {
 
         try {
