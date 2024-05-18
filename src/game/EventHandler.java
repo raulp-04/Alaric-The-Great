@@ -75,6 +75,8 @@ public class EventHandler {
                 }
                 if (defeatedEnemies) {
                     teleport(4, 32, 31);
+                    gp.stopMusic();
+                    gp.playMusic(13);
                 } else gp.ui.showMessage("DEFEAT ALL ENEMIES TO TELEPORT");
             }
         }
@@ -103,22 +105,6 @@ public class EventHandler {
             eventRect[map][col][row].y = eventRect[map][col][row].eventRectDefaultY;
         }
         return hit;
-    }
-    public void damagePit(int gameState) {
-        gp.gameState = gameState;
-        gp.ui.currentDialog = "You fell into a pit";
-        gp.player.life--;
-        gp.playSE(6);
-//        eventRect[col][row].eventDone = true;
-        canTouchEvent = false;
-    }
-    public void healingPit(int gameState) {
-        if (gp.keyHandler.enterPressed) {
-            gp.gameState = gameState;
-            gp.ui.currentDialog = "You drink water.. Life has been replenished";
-            gp.playSE(7);
-            gp.player.life = gp.player.maxLife;
-        }
     }
     public void teleport(int map, int row, int col) {
         gp.currentMap = map;

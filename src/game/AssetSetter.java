@@ -169,15 +169,5 @@ public class AssetSetter {
         gp.monsterArray[mapNum][0].worldX = 26 * gp.tileSize;
         gp.monsterArray[mapNum][0].worldY = 12 * gp.tileSize;
         gp.monsterArray[mapNum][0].life = gp.monsterArray[mapNum][0].maxLife;
-
-        gp.monsterArray[mapNum][1] = new MON_Goblin(gp);
-        gp.monsterArray[mapNum][1].worldX = 27 * gp.tileSize;
-        gp.monsterArray[mapNum][1].worldY = 24 * gp.tileSize;
-        gp.monsterArray[mapNum][1].life = gp.monsterArray[mapNum][1].maxLife;
-
-        gp.monsterArray[mapNum][2] = new MON_Goblin(gp);
-        gp.monsterArray[mapNum][2].worldX = 39 * gp.tileSize;
-        gp.monsterArray[mapNum][2].worldY = 24 * gp.tileSize;
-        gp.monsterArray[mapNum][2].life = gp.monsterArray[mapNum][2].maxLife;
     }
 }

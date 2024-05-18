@@ -32,7 +32,7 @@ public class KeyHandler implements KeyListener {
                     if (UI.hasEnteredOnce) {
                         gp.stopMusic();
                         gp.gameState = gp.PLAY_STATE;
-                        gp.playMusic(0);
+                        if (gp.currentMap == 4)gp.playMusic(13); else gp.playMusic(0);
                     }
                 }
                 if (gp.ui.command == 1) {
@@ -45,7 +45,7 @@ public class KeyHandler implements KeyListener {
                     gp.loadData();
                     gp.stopMusic();
                     gp.gameState = gp.PLAY_STATE;
-                    gp.playMusic(0);
+                    if (gp.currentMap == 4)gp.playMusic(13); else gp.playMusic(0);
                     UI.hasEnteredOnce = true;
                 }
                 if (gp.ui.command == 3) {

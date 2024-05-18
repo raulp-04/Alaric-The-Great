@@ -234,7 +234,7 @@ public class GamePanel extends JPanel implements Runnable {
         aSetter.setMonster();
         player.hasGem = 0;
         stopMusic();
-        playMusic(0);
+        if (currentMap == 4)playMusic(13); else playMusic(0);
         UI.hasEnteredOnce = true;
     }
     public void restart() {

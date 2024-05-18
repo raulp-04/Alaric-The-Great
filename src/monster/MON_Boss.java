@@ -27,7 +27,7 @@ public class MON_Boss extends Entity {
         name = "Goblin";
         type = 2;
         speed = 2;
-        maxLife = 20;
+        maxLife = 30;
         life = maxLife;
 
         solidArea = new Rectangle(11*10, 9*10, 10*10, 14*10);
