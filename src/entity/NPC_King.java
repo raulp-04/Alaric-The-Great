@@ -36,7 +36,10 @@ public class NPC_King extends Entity{
 
         dialog[0] = "Hello, Alaric.";
         dialog[1] = "I am king Arthur";
-        dialog[2] = "You must retrieve the ancient crown";
+        dialog[2] = "You have to defeat Akvur in order to";
+        dialog[3] = "retrieve the ancient crown that his minions stole.";
+        dialog[5] = "He will keep it in his chest.";
+
     }
     @Override public void speak() {
         super.speak();

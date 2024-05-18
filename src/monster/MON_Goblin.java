@@ -232,7 +232,7 @@ public class MON_Goblin extends Entity {
         if (dyingCounter > i && dyingCounter <= i*2) {changeAlpha(g2d, 1f);}
         if (dyingCounter > i*2 && dyingCounter <= i*3) {changeAlpha(g2d, 0f);}
         if (dyingCounter > i*3 && dyingCounter <= i*4) {changeAlpha(g2d, 1f);}
-        if (dyingCounter > i*4 && dyingCounter <= i*5) {changeAlpha(g2d, 0f);if(dyingCounter==i*5)gp.playSE(5);}
+        if (dyingCounter > i*4 && dyingCounter <= i*5) {changeAlpha(g2d, 0f);if(dyingCounter==i*5)gp.playSE(10);}
         if (dyingCounter > i*5 && dyingCounter <= i*6) {changeAlpha(g2d, 1f);}
         if (dyingCounter > i*6 && dyingCounter <= i*7) {changeAlpha(g2d, 0f);}
         if (dyingCounter > i*7 && dyingCounter <= i*8) {changeAlpha(g2d, 1f);}
@@ -248,6 +248,6 @@ public class MON_Goblin extends Entity {
         int i = new Random().nextInt(100)+1;
         // TYPE OF DROP
         if (i <= 90 && i > 60) dropItem(new OBJ_Gems(gp));
-        else if (i>90 && i<=100 ) dropItem(new OBJ_Cherry(gp));
+        else if (i>90) dropItem(new OBJ_Cherry(gp));
     }
 }

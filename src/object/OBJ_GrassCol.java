@@ -15,7 +15,7 @@ public class OBJ_GrassCol extends Entity {
         walkDown = new BufferedImage[1];
         try {
             BufferedImage img = ImageIO.read(getClass().getClassLoader().getResourceAsStream("tiles/tile-sheet.png"));
-            walkDown[0] = img.getSubimage(32, 94, 16, 16);
+            walkDown[0] = img.getSubimage(86, 144, 16, 16);
         } catch (IOException e) {
             e.printStackTrace();
         }

@@ -11,6 +11,7 @@ import java.util.Comparator;
 import java.util.Objects;
 
 public class GamePanel extends JPanel implements Runnable {
+    DataBase dataBase = new DataBase("Baza de Date", this);
     // SCREEN SETTINGS
     final int originalTileSize = 16; // 16x16 tile
     public final int scale = 3;
@@ -57,6 +58,7 @@ public class GamePanel extends JPanel implements Runnable {
     public final int DIALOG_STATE = 3;
     public final int CONTROL_STATE = 4;
     public final int GAMEOVER_STATE = 5;
+    public final int WIN_STATE = 6;
     public int gameState = MENU_STATE;
 
     public GamePanel() {
@@ -230,8 +232,10 @@ public class GamePanel extends JPanel implements Runnable {
         player.setDefaultPos();
         aSetter.setNPC();
         aSetter.setMonster();
+        player.hasGem = 0;
         stopMusic();
         playMusic(0);
+        UI.hasEnteredOnce = true;
     }
     public void restart() {
         player.setDefaultValues();
@@ -241,5 +245,114 @@ public class GamePanel extends JPanel implements Runnable {
         stopMusic();
         playMusic(0);
         currentMap = 1;
+    }
+    public void loadData() {
+
+        // Player Settings
+        String tableName = "PLAYER_SETTINGS";
+
+        // Extragere date din tabel
+        dataBase.selectPlayerTable(tableName);
+    }
+    public void saveData() {
+
+        // Entities
+        String monsters = "";
+        for(int i = 0; i < maxMap; ++i) {
+            for(int j = 0; j < monsterArray[i].length; ++j) {
+                if(monsterArray[i][j] != null) {
+                    monsters += monsterArray[i][j].worldX + ", " + monsterArray[i][j].worldY + ", " + monsterArray[i][j].life + ", ";
+                } else {
+                    monsters += -1 + ", " + -1 + ", " + -1 + ", ";
+                }
+            }
+        }
+        if(!monsters.isEmpty()) {
+            monsters = monsters.substring(0, monsters.length() - 2);
+        }
+
+        String NPC = "";
+        for(int i = 0; i < maxMap; ++i) {
+            for(int j = 0; j < npc[i].length; ++j) {
+                if(npc[i][j] != null) {
+                    NPC += npc[i][j].worldX + ", " + npc[i][j].worldY + ", ";
+                } else {
+                    NPC += -1 + ", " + -1 + ", ";
+                }
+            }
+        }
+        if(!NPC.isEmpty()) {
+            NPC = NPC.substring(0, NPC.length() - 2);
+        }
+
+        String objects = "";
+        for(int i = 0; i < maxMap; ++i) {
+            for(int j = 0; j < obj[i].length; ++j) {
+                if(obj[i][j] != null) {
+                    objects += obj[i][j].worldX + ", " + obj[i][j].worldY + ", ";
+                } else {
+                    objects += -1 + ", " + -1 + ", ";
+                }
+            }
+        }
+        if(!objects.isEmpty()) {
+            objects = objects.substring(0, objects.length() - 2);
+        }
+
+        // Player Settings
+        String tableName = "PLAYER_SETTINGS";
+
+        // Creare tabel daca nu exista
+        ArrayList<String> fields = new ArrayList<>();
+        fields.add("PLAYERPOSX");
+        fields.add("TEXT");
+        fields.add("PLAYERPOSY");
+        fields.add("TEXT");
+        fields.add("CURRENTMAP");
+        fields.add("TEXT");
+        fields.add("DIRECTION");
+        fields.add("TEXT");
+        fields.add("LIFE");
+        fields.add("TEXT");
+        fields.add("SCORE");
+        fields.add("TEXT");
+        fields.add("HASWEAPON");
+        fields.add("TEXT");
+        fields.add("HASKEY");
+        fields.add("TEXT");
+        fields.add("MONSTERS");
+        fields.add("TEXT");
+        fields.add("NPC");
+        fields.add("TEXT");
+        fields.add("OBJECTS");
+        fields.add("TEXT");
+        dataBase.createPlayerTable(tableName, fields);
+
+        // Adaugare date in tabel
+        fields.clear();
+        fields.add("PLAYERPOSX"); // 1
+        fields.add("PLAYERPOSY"); // 2
+        fields.add("CURRENTMAP"); // 3
+        fields.add("DIRECTION"); // 4
+        fields.add("LIFE"); // 5
+        fields.add("SCORE"); // 6
+        fields.add("HASWEAPON");
+        fields.add("HASKEY");
+        fields.add("MONSTERS"); // 7
+        fields.add("NPC"); // 8
+        fields.add("OBJECTS"); // 9
+        ArrayList<String> values = new ArrayList<>();
+        values.add(String.valueOf(player.worldX)); // 1
+        values.add(String.valueOf(player.worldY)); // 2
+        values.add(String.valueOf(currentMap)); // 3
+        values.add(player.direction); // 4
+        values.add(String.valueOf(player.life)); // 5
+        values.add(String.valueOf(player.hasGem)); // 6
+        if (player.hasSword) values.add("1"); else values.add("0");
+        if (player.hasKey) values.add("1"); else values.add("0");
+        values.add(monsters); // 7
+        values.add(NPC); // 8
+        values.add(objects); // 9
+        dataBase.insertPlayerTable(tableName, fields, values);
     }
 }

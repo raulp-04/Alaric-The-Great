@@ -47,30 +47,51 @@ public class TileManager {
             tile[4].image = img.getSubimage(144, 208, 32, 32);
             tile[4].collition = true;
 
-            tile[5] = new Tile(); // MUSHROOM BROWN [5]
-            tile[5].image = img.getSubimage(112, 208, 32, 32);
-            tile[5].collition = true;
 
             // GRASS AND DIRT
                 // castle floor
             tile[6] = new Tile();
             tile[6].image = img.getSubimage(16, 192, 16, 16);
-                // TOP COMBINATION [7]
-            tile[7] = new Tile();
-            tile[7].image = img.getSubimage(33, 110, 16, 16);
+
                 // STONE WALL
             tile[8] = new Tile();
             tile[8].image = img.getSubimage(32, 208, 16, 16);
             tile[8].collition = true;
 
-            tile[9] = new Tile();
-            tile[9].image = water.getSubimage(80, 16, 16, 16);
-            tile[9].collition = true;
+            // CORNERS
+            tile[11] = new Tile();
+            tile[11].image = img.getSubimage(96, 128, 16, 16); // righttop corner
 
-            tile[10] = new Tile();
-            tile[10].image = water.getSubimage(96, 16, 16, 16);
-            tile[10].collition = true;
+            tile[12] = new Tile();
+            tile[12].image = img.getSubimage(96, 144, 16, 16); // right middle
 
+            tile[13] = new Tile();
+            tile[13].image = img.getSubimage(96, 160, 16, 16); // rightbottom corner
+
+            tile[14] = new Tile();
+            tile[14].image = img.getSubimage(80, 128, 16, 16); // top middle
+
+            tile[15] = new Tile();
+            tile[15].image = img.getSubimage(64, 128, 16, 16); // lefttop corner
+
+            tile[16] = new Tile();
+            tile[16].image = img.getSubimage(64, 144, 16, 16); // left middle
+
+            tile[17] = new Tile();
+            tile[17].image = img.getSubimage(64, 160, 16, 16); // left bottom
+
+            tile[18] = new Tile();
+            tile[18].image = img.getSubimage(80, 160, 16, 16); // bottom midlde
+
+            // inside corners
+            tile[19] = new Tile();
+            tile[19].image = img.getSubimage(16, 80, 16, 16); // bottom
+
+            tile[20] = new Tile();
+            tile[20].image = img.getSubimage(48, 112, 16, 16); // top
+
+            tile[21] = new Tile();
+            tile[21].image = img.getSubimage(48, 80, 16, 16); // top
 
 
         } catch (IOException e) {

@@ -11,6 +11,8 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.Objects;
 
+import static java.lang.System.exit;
+
 public class UI {
     Graphics2D g2d;
     GamePanel gp;
@@ -48,7 +50,7 @@ public class UI {
         g2d.setFont(g2d.getFont().deriveFont(30F));
         g2d.setColor(Color.WHITE);
         g2d.drawString("SCORE " + gp.player.hasGem, 25, 45);
-        g2d.drawString("KEYS " + gp.player.hasKey, 25, 75);
+        g2d.drawString("LEVEL " + gp.currentMap, 25, 75);
 
         if (messageOn) {
             g2d.setColor(Color.BLACK);
@@ -65,19 +67,6 @@ public class UI {
                 messageCounter = 0;
                 messageOn = false;
             }
-        }
-        g2d.setColor(Color.BLACK);
-        g2d.fillRoundRect(5, gp.screenHeight-40, 120, 35, 10, 10);
-        g2d.setColor(Color.WHITE);
-        g2d.setStroke(new BasicStroke(5));
-        g2d.drawRoundRect(5, gp.screenHeight-40, 120, 35, 10, 10);
-        g2d.setFont(g2d.getFont().deriveFont(30F));
-        switch (gp.currentMap) {
-            case 1: g2d.drawString("LEVEL " + gp.currentMap, 15, gp.screenHeight-13); break;
-            case 2: g2d.drawString("LEVEL " + gp.currentMap, 15, gp.screenHeight-13); break;
-            case 3: g2d.drawString("LEVEL " + gp.currentMap, 15, gp.screenHeight-13); break;
-            case 4: g2d.drawString("LEVEL " + gp.currentMap, 15, gp.screenHeight-13); break;
-
         }
     }
     public void drawPlayerLife(Graphics2D g2d) {
@@ -161,6 +150,10 @@ public class UI {
         // GAME OVER STATE
         if (gp.gameState == gp.GAMEOVER_STATE) {
             drawGameOver(g2d);
+        }
+        // WIN STATE
+        if (gp.gameState == gp.WIN_STATE) {
+            drawWin(g2d);
         }
     }
     public void drawControl(Graphics2D g2d) {
@@ -306,7 +299,7 @@ public class UI {
             g2d.drawString(menuTitle, x, y);
         }
 
-        menuTitle = "QUIT GAME";
+        menuTitle = "QUIT AND SAVE";
         x = gp.tileSize;
         y = gp.tileSize*10;
         g2d.setColor(Color.BLACK);
@@ -346,26 +339,13 @@ public class UI {
         //retry
         g2d.setFont(g2d.getFont().deriveFont(Font.BOLD, 48f));
         x = gp.tileSize;
-        y = gp.tileSize*8;
+        y = gp.tileSize*9;
         text = "RETRY";
         g2d.setColor(Color.black);
         g2d.drawString(text, x, y);
         g2d.setColor(Color.WHITE);
         g2d.drawString(text, x-4, y-4);
         if (command == 1) {
-            g2d.setColor(Color.gray);
-            g2d.drawString(text, x-4, y-4);
-        }
-        //titlescreen
-        hasEnteredOnce = false;
-        x = gp.tileSize;
-        y = gp.tileSize*9;
-        text = "BACK TO MENU";
-        g2d.setColor(Color.black);
-        g2d.drawString(text, x, y);
-        g2d.setColor(Color.WHITE);
-        g2d.drawString(text, x-4, y-4);
-        if (command == 2) {
             g2d.setColor(Color.gray);
             g2d.drawString(text, x-4, y-4);
         }
@@ -377,9 +357,83 @@ public class UI {
         g2d.drawString(text, x, y);
         g2d.setColor(Color.WHITE);
         g2d.drawString(text, x-4, y-4);
-        if (command == 3) {
+        if (command == 2) {
             g2d.setColor(Color.gray);
             g2d.drawString(text, x-4, y-4);
         }
+    }
+    public void drawWin(Graphics2D g2d) {
+        try {
+            BufferedImage img = ImageIO.read(Objects.requireNonNull(getClass().getClassLoader().getResourceAsStream("wallpaper/win_wallpaper.jpg")));
+            g2d.drawImage(img, -400, -400, null);
+        }catch (Exception e) {
+            e.printStackTrace();
+        }
+        int x;
+        int y;
+        String text;
+        g2d.setFont(mPixel);
+        g2d.setFont(g2d.getFont().deriveFont(Font.BOLD, 80f));
+        text = "GAME WON";
+        g2d.setColor(Color.BLACK);
+        //shadow
+        x = getXforCenter(text);
+        y = gp.tileSize*2 - 15;
+        g2d.drawString(text, x, y);
+        //main
+        g2d.setColor(Color.WHITE);
+        g2d.drawString(text, x-4, y-4);
+
+        g2d.setFont(g2d.getFont().deriveFont(Font.BOLD, 30f));
+        text = "You have successfully completed the game ";
+        x = getXforCenter(text);
+        y = gp.screenHeight/2;
+        g2d.setColor(Color.BLACK);
+        g2d.drawString(text, x, y);
+        //main
+        g2d.setColor(Color.WHITE);
+        g2d.drawString(text, x-4, y-4);
+
+        g2d.setFont(g2d.getFont().deriveFont(Font.BOLD, 30f));
+        text = "by defeating Akvur and returning ";
+        x = getXforCenter(text);
+        y += 30;
+        g2d.setColor(Color.BLACK);
+        g2d.drawString(text, x, y);
+        //main
+        g2d.setColor(Color.WHITE);
+        g2d.drawString(text, x-4, y-4);
+
+        g2d.setFont(g2d.getFont().deriveFont(Font.BOLD, 30f));
+        text = "the crown to King Arthur.";
+        x = getXforCenter(text);
+        y += 30;
+        g2d.setColor(Color.BLACK);
+        g2d.drawString(text, x, y);
+        //main
+        g2d.setColor(Color.WHITE);
+        g2d.drawString(text, x-4, y-4);
+
+        g2d.setFont(g2d.getFont().deriveFont(Font.BOLD, 30f));
+        text = "You are a hero.";
+        x = getXforCenter(text);
+        y += 30;
+        g2d.setColor(Color.BLACK);
+        g2d.drawString(text, x, y);
+        //main
+        g2d.setColor(Color.WHITE);
+        g2d.drawString(text, x-4, y-4);
+
+        g2d.setFont(g2d.getFont().deriveFont(Font.BOLD, 30f));
+        text = "PRESS ENTER TO CLOSE THE GAME";
+        x = getXforCenter(text);
+        y = gp.screenHeight-20;
+        g2d.setColor(Color.BLACK);
+        g2d.drawString(text, x, y);
+        //main
+        g2d.setColor(Color.WHITE);
+        g2d.drawString(text, x-4, y-4);
+
+
     }
 }

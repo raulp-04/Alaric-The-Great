@@ -55,18 +55,6 @@ public class EventHandler {
             if (hit(32, 8, "any", 1)) {
                 teleport(2, 33, 31);
             }
-            if (hit(32, 35, "any",2)) {
-                defeatedEnemies = true;
-                for (int i = 0; i < gp.monsterArray[gp.currentMap].length; i++) {
-                    if (gp.monsterArray[gp.currentMap][i] != null) {
-                        defeatedEnemies = false;
-                    }
-                }
-                if (defeatedEnemies) {
-                    teleport(1, 8, 31);
-                } else gp.ui.showMessage("DEFEAT ALL ENEMIES TO TELEPORT");
-
-            }//1&2
             if (hit(53, 15, "any",2)) {
                 defeatedEnemies = true;
                 for (int i = 0; i < gp.monsterArray[gp.currentMap].length; i++) {
@@ -78,17 +66,6 @@ public class EventHandler {
                     teleport(3, 14, 9);
                 } else gp.ui.showMessage("DEFEAT ALL ENEMIES TO TELEPORT");
             }
-            if (hit(8, 15, "any",3)) {
-                defeatedEnemies = true;
-                for (int i = 0; i < gp.monsterArray[gp.currentMap].length; i++) {
-                    if (gp.monsterArray[gp.currentMap][i] != null) {
-                        defeatedEnemies = false;
-                    }
-                }
-                if (defeatedEnemies) {
-                    teleport(2, 14, 51);
-                } else gp.ui.showMessage("DEFEAT ALL ENEMIES TO TELEPORT");
-            }//2&3
             if (hit(32, 6, "any",3)) {
                 defeatedEnemies = true;
                 for (int i = 0; i < gp.monsterArray[gp.currentMap].length; i++) {
@@ -100,17 +77,6 @@ public class EventHandler {
                     teleport(4, 32, 31);
                 } else gp.ui.showMessage("DEFEAT ALL ENEMIES TO TELEPORT");
             }
-            if (hit(32, 38, "any",4)) {
-                defeatedEnemies = true;
-                for (int i = 0; i < gp.monsterArray[gp.currentMap].length; i++) {
-                    if (gp.monsterArray[gp.currentMap][i] != null) {
-                        defeatedEnemies = false;
-                    }
-                }
-                if (defeatedEnemies) {
-                    teleport(3, 7, 31);
-                } else gp.ui.showMessage("DEFEAT ALL ENEMIES TO TELEPORT");
-            }//3&4
         }
     }
     public boolean hit(int col, int row, String reqDirection, int map) {

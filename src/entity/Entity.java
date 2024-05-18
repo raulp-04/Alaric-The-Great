@@ -11,7 +11,7 @@ public abstract class Entity {
     public String name;
     public boolean collision = false;
 
-    public GamePanel gp;
+    public static GamePanel gp;
     public int worldX, worldY;
     public int speed;
     public String direction = "down";
@@ -81,8 +81,8 @@ public abstract class Entity {
         for (int i = 0; i < gp.obj[gp.currentMap].length; i++) {
             if (gp.obj[gp.currentMap][i] == null) {
                 gp.obj[gp.currentMap][i] = droppedItem;
-                gp.obj[gp.currentMap][i].worldX = this.worldX; // Dead monster coord.
-                gp.obj[gp.currentMap][i].worldY = this.worldY;
+                gp.obj[gp.currentMap][i].worldX = this.worldX + gp.tileSize-20; // Dead monster coord.
+                gp.obj[gp.currentMap][i].worldY = this.worldY + gp.tileSize-20;
                 break;
             }
         }

@@ -15,8 +15,8 @@ public class Player extends Entity {
     public final int screenX;
     public final int screenY;
     public int hasGem = 0;
-    boolean hasSword = false;
-    public int hasKey = 0;
+    public boolean hasSword = false;
+    public boolean hasKey = false;
     BufferedImage[] walkUpS;
     BufferedImage[] walkDownS;
     BufferedImage[] walkLeftS;
@@ -52,9 +52,9 @@ public class Player extends Entity {
 
         invincible = false;
         hasSword = false;
-        hasKey = 0;
+        hasKey = false;
         hasGem = 0;
-        worldX = gp.tileSize * 30;
+        worldX = gp.tileSize * 31;
         worldY = gp.tileSize * 28;
         speed = 4;
         direction = "right";
@@ -295,21 +295,17 @@ public class Player extends Entity {
                     gp.playSE(2);
                     break;
                 case "Key":
-                    hasKey += 1;
                     gp.obj[gp.currentMap][index] = null;
+                    hasKey = true;
                     gp.ui.showMessage("PICKED UP A KEY");
                     gp.playSE(2);
                     break;
                 case "Chest":
-                    if(hasKey>0) {
-                        hasKey--;
-                        gp.ui.showMessage("USED A KEY");
+                    if(hasKey) {
                         gp.obj[gp.currentMap][index] = null;
-                        Random rand = new Random();
-                        int gemNum = rand.nextInt(900)+101;
-                        hasGem += gemNum;
-                        gp.ui.showMessage("CHEST HAD "+ gemNum + " GEMS");
-                        gp.playSE(1);
+                        gp.gameState = gp.WIN_STATE;
+                        gp.stopMusic();
+                        gp.playMusic(12);
                     } else gp.ui.showMessage("YOU NEED A KEY TO OPEN");
                     break;
                 case "Cherry":
