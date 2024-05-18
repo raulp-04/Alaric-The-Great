@@ -46,11 +46,13 @@ public class KeyHandler implements KeyListener {
                     gp.stopMusic();
                     gp.gameState = gp.PLAY_STATE;
                     gp.playMusic(0);
+                    UI.hasEnteredOnce = true;
                 }
                 if (gp.ui.command == 3) {
                     gp.gameState = gp.CONTROL_STATE;
                 }
                 if (gp.ui.command == 4) {
+                    if (!UI.hasEnteredOnce) {exit(0);}
                     gp.saveData();
                     exit(0);
                 }

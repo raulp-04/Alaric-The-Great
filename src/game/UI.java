@@ -299,7 +299,7 @@ public class UI {
             g2d.drawString(menuTitle, x, y);
         }
 
-        menuTitle = "QUIT AND SAVE";
+        menuTitle = (hasEnteredOnce)?"QUIT AND SAVE":"QUIT";
         x = gp.tileSize;
         y = gp.tileSize*10;
         g2d.setColor(Color.BLACK);
