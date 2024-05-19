@@ -1,7 +1,5 @@
 package entity;
-
 import game.GamePanel;
-
 import java.awt.*;
 import java.awt.image.BufferedImage;
 

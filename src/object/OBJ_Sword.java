@@ -1,8 +1,6 @@
 package object;
-
 import entity.Entity;
 import game.GamePanel;
-
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
 import java.io.IOException;

@@ -1,17 +1,12 @@
 package monster;
-
 import entity.Entity;
 import game.GamePanel;
-import object.OBJ_Key;
-
 import javax.imageio.ImageIO;
-import javax.swing.*;
 import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.util.Objects;
 import java.util.Random;
-
 import static java.lang.Math.abs;
 
 public class MON_Boss extends Entity {

@@ -1,8 +1,6 @@
 package game;
-
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
-
 import static java.lang.System.exit;
 
 public class KeyHandler implements KeyListener {

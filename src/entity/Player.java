@@ -1,8 +1,6 @@
 package entity;
-
 import game.GamePanel;
 import game.KeyHandler;
-
 import javax.imageio.ImageIO;
 import java.awt.*;
 import java.awt.image.BufferedImage;

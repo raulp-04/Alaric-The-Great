@@ -1,5 +1,4 @@
 package game;
-
 import entity.Entity;
 
 public class CollisionChecker {
@@ -59,7 +58,6 @@ public class CollisionChecker {
         }
     }
     public int collisionCheckObject(Entity entity, boolean player) {
-
         int index = gp.NO_COLLISION;
 
         for(int i = 0; i < gp.obj[gp.currentMap].length; i++) {
@@ -127,8 +125,7 @@ public class CollisionChecker {
 
         return index;
     }
-    /*NPC*/ public int collisionCheckEntity(Entity entity, Entity[][] target ) {
-
+    public int collisionCheckEntity(Entity entity, Entity[][] target ) {
         int index = gp.NO_COLLISION;
 
         for(int i = 0; i < target[gp.currentMap].length; i++) {
@@ -185,7 +182,6 @@ public class CollisionChecker {
         return index;
    }
     public boolean checkPlayer(Entity entity) {
-
         contactPlayer = false;
        // get entity solid area pos.
        entity.solidArea.x = entity.worldX + entity.solidArea.x;

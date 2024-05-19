@@ -1,9 +1,7 @@
 package game;
-
 import entity.Entity;
 import entity.Player;
 import tile.TileManager;
-
 import javax.swing.*;
 import java.awt.*;
 import java.util.ArrayList;

@@ -1,17 +1,12 @@
 package game;
-
 import entity.Entity;
 import object.OBJ_Heart;
-
-
 import javax.imageio.ImageIO;
 import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.Objects;
-
-import static java.lang.System.exit;
 
 public class UI {
     Graphics2D g2d;

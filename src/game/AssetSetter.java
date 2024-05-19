@@ -1,5 +1,4 @@
 package game;
-
 import entity.NPC_King;
 import monster.MON_Boss;
 import monster.MON_Goblin;

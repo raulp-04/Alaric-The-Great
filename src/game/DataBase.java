@@ -1,10 +1,8 @@
 package game;
-
 import java.sql.*;
 import java.util.ArrayList;
 
 public class DataBase {
-
     private Connection conn;
     private Statement stmt;
     private ResultSet rs;
@@ -112,8 +110,6 @@ public class DataBase {
                 monsters = rs.getString("MONSTERS");
                 npc = rs.getString("NPC");
                 objects = rs.getString("OBJECTS");
-//                music = rs.getInt("MUSIC");
-//                fx = rs.getInt("FX");
             }
             gp.player.worldX = playerX;
             gp.player.worldY = playerY;

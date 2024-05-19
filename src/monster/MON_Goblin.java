@@ -1,10 +1,8 @@
 package monster;
-
 import entity.Entity;
 import game.GamePanel;
 import object.OBJ_Cherry;
 import object.OBJ_Gems;
-
 import javax.imageio.ImageIO;
 import java.awt.*;
 import java.awt.image.BufferedImage;
