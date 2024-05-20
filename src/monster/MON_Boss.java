@@ -74,19 +74,19 @@ public class MON_Boss extends Entity {
         if (visible()) {
             int playerX = gp.player.worldX;
             int playerY = gp.player.worldY;
-            int distX = abs(worldX - playerX);
-            int distY = abs(worldY - playerY);
+            int x = solidArea.x+worldX;
+            int y = solidArea.y+worldY;
+            int distX = abs(x - playerX);
+            int distY = abs(y - playerY);
 
             if (distX > distY) {
-                if (playerY-100 == worldY) {
-                    if (worldX < playerX+200) {
+                    if (x < playerX) {
                         direction = "right";
                     } else {
                         direction = "left";
                     }
-                }
             } else {
-                if (worldY+100 < playerY) {
+                if (y < playerY) {
                     direction = "down";
                 } else {
                     direction = "up";
@@ -203,31 +203,24 @@ public class MON_Boss extends Entity {
         int screenX = worldX - gp.player.worldX + gp.player.screenX;
         int screenY = worldY - gp.player.worldY + gp.player.screenY;
 
-        if (worldX + 2*gp.tileSize> gp.player.worldX-gp.player.screenX &&
-                worldY + 2*gp.tileSize> gp.player.worldY-gp.player.screenY &&
-                worldX - 2*gp.tileSize< gp.player.worldX+gp.player.screenX &&
-                worldY - 2*gp.tileSize< gp.player.worldY+gp.player.screenY) { // END IF
-
-            BufferedImage images = switch (direction) {
-                case "up" -> (!attacking)? walkUp[spriteNumber] : attackUp[spriteNumber];
-                case "down" -> (!attacking)? walkDown[spriteNumber] : attackDown[spriteNumber];
-                case "left" -> (!attacking)? walkLeft[spriteNumber] : attackLeft[spriteNumber];
-                case "right" -> (!attacking)? walkRight[spriteNumber] : attackRight[spriteNumber];
-                default -> null;
-            };
-            if (invincible) {
-                g2d.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 0.4f));
-            }
-            if (dying) {
-                dyingAnimation(g2d);
-            }
-            g2d.drawImage(images, screenX, screenY, 320, 320, null);
-            g2d.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 1f));
-
-//            g2d.setColor(Color.BLACK);
-//            g2d.drawRect(screenX+ solidArea.x,screenY+ solidArea.y, solidArea.width, solidArea.height);
-
+        BufferedImage images = switch (direction) {
+            case "up" -> (!attacking)? walkUp[spriteNumber] : attackUp[spriteNumber];
+            case "down" -> (!attacking)? walkDown[spriteNumber] : attackDown[spriteNumber];
+            case "left" -> (!attacking)? walkLeft[spriteNumber] : attackLeft[spriteNumber];
+            case "right" -> (!attacking)? walkRight[spriteNumber] : attackRight[spriteNumber];
+            default -> null;
+        };
+        if (invincible) {
+            g2d.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 0.4f));
         }
+        if (dying) {
+            dyingAnimation(g2d);
+        }
+        g2d.drawImage(images, screenX, screenY, 320, 320, null);
+        g2d.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 1f));
+
+        g2d.setColor(Color.BLACK);
+        g2d.drawRect(screenX+ solidArea.x,screenY+ solidArea.y, solidArea.width, solidArea.height);
     }
     public void dyingAnimation(Graphics2D g2d) {
         dyingCounter++;
