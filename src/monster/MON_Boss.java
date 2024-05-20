@@ -219,8 +219,8 @@ public class MON_Boss extends Entity {
         g2d.drawImage(images, screenX, screenY, 320, 320, null);
         g2d.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 1f));
 
-        g2d.setColor(Color.BLACK);
-        g2d.drawRect(screenX+ solidArea.x,screenY+ solidArea.y, solidArea.width, solidArea.height);
+//        g2d.setColor(Color.BLACK);
+//        g2d.drawRect(screenX+ solidArea.x,screenY+ solidArea.y, solidArea.width, solidArea.height);
     }
     public void dyingAnimation(Graphics2D g2d) {
         dyingCounter++;
